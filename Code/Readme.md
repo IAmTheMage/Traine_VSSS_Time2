@@ -10,7 +10,6 @@
 >> - [ ] Struct de velocidades
 > - [ ] Função de retornar distâncias entre dois pontos
 > - [ ] Função para retornar o ângulo que o robô deve seguir
-> - [ ]
 
 - [ ] Criar a classe Strategy bem como suas propriedades
 > - [ ] Vetor de objetos da classe/Struct Robots de tamanho fixo 3

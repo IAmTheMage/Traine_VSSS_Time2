@@ -6,9 +6,15 @@
 #define BASE_STRATEGY_INCLUDE_H
 
 class BaseStrategy {
+    private:
+        Point2f centroidAtk;
+        Point2f centroidDef;
+
     public:
         BaseStrategy(std::shared_ptr<Object<void*>> ball,std::shared_ptr<Object<Robot>*> myTeamRobots, 
         std::shared_ptr<Object<Robot>*> anotherTeamRobots);
+        
+        BaseStrategy();
         
         ~BaseStrategy();
 
@@ -29,9 +35,6 @@ class BaseStrategy {
         void setBall(std::shared_ptr<Object<void*>> _ball) {
             this->ball = _ball;
         }
-    private:
-        Point2f centroidAtk;
-        Point2f centroidDef;
 
     protected:
         std::shared_ptr<Object<void*>> ball;

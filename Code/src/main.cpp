@@ -1,9 +1,12 @@
-#include "../include/Utils.h"
-#include <iostream>
-using namespace std;
+#include "../include/Game.h"
 
-int main() {
-    Point2f pos1 = {16, 15}, pos2 = {19, 9};
-    float theta = Utils::getAngle(pos2, pos1);
-    cout << theta << endl;
+int main(int argc, char** argv) {
+    if(argc != 1) {
+        Game* game = new Game(argc, argv);
+        game->run();
+    }
+    else {
+        Game* game = new Game();
+        game->run();
+    }
 }

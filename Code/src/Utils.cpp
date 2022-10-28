@@ -7,12 +7,7 @@
 
 Utils::Utils(Robot robo)
 {
-    //  Pos inicial
-    x1 = robo.pos.x;
-    y1 = robo.pos.y;
-    //  Meta 
-    x2 = robo.goal.x;
-    y2 = robo.goal.y;
+
 }
 
 Utils::~Utils()

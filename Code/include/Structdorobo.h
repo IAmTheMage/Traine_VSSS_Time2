@@ -18,13 +18,16 @@ struct Vel
 
 struct Robot
 {
-
-    Point2f pos;
     Point2f goal;
-    Vel speed;
-
     int index;
     float orientation;
+};
+
+template<typename T>
+struct Object {
+    T includedData;
+    Vel speed;
+    Point2f pos;
 };
 
 #endif

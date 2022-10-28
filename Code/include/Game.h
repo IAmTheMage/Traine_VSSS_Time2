@@ -19,6 +19,8 @@ class Game {
     private:
         int score1, score2, pauseCondition;
         std::shared_ptr<Object<void*>> ball;
+        std::shared_ptr<Object<Robot>*> team1Robots;
+        std::shared_ptr<Object<Robot>*> team2Robots;
         void printScore();
         StrategyManager* strategy;
         void instance();

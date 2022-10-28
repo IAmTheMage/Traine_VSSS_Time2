@@ -6,16 +6,22 @@
 
 class Strategy : public BaseStrategy {
     public:
-        virtual int gooalkeper() {
+        Strategy(std::shared_ptr<Object<void*>> ball,std::shared_ptr<Object<Robot>*> myTeamRobots, 
+        std::shared_ptr<Object<Robot>*> anotherTeamRobots) : BaseStrategy( ball, myTeamRobots, 
+        anotherTeamRobots) {
+
+        }
+        
+        int gooalkeper() {
             return 0;
         }
-        virtual int defender() {
+        int defender() {
             return 1;
         }
-        virtual int striker() {
+        int striker() {
             return 2;
         }
-        virtual void decisions() {
+        void decisions() {
             std::cout << "Strátegia basica aqui executada com a posicao da bola: { " << this->ball->pos.x << ',' << this->ball->pos.y << " }" << std::endl << std::endl;
         }
     private:

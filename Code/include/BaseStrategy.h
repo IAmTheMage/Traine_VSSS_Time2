@@ -6,7 +6,7 @@
 
 class BaseStrategy {
     public:
-        BaseStrategy(Object<Robot> team1[3], Object<Robot> team2[3], Object<void> ball);
+        BaseStrategy(/*Object<Robot> team1[3], Object<Robot> team2[3], Object<void> ball*/);
         ~BaseStrategy();
 
         virtual int gooalkeper() {
@@ -27,7 +27,7 @@ class BaseStrategy {
         Point2f centroidDef;
         Object<Robot>* team1; 
         Object<Robot>* team2; 
-        Object<void> ball;
+        Object<void*> ball;
 };
 
 #endif

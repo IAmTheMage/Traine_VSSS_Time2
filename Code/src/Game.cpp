@@ -4,6 +4,10 @@ Game::Game(int argc, char** argv) {
     if(argc > 1) {
         this->pauseCondition = atoi(argv[1]);
     }
+    Strategy* _strategy = new Strategy();
+    this->strategy = new StrategyManager();
+    this->strategy->addStrategy("Primeira estrategia",_strategy);
+    this->strategy->setStrategy("Primeira estrategia");
 }
 
 Game::Game() {
@@ -21,5 +25,6 @@ void Game::run() {
     }
     while(isRunning) {
         std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
+        this->strategy->deduce();
     }
 }

@@ -1,4 +1,5 @@
 #include "BaseStrategy.h"
+#include "iostream"
 
 #ifndef STRATEGY_INCLUDE_H
 #define STRATEGY_INCLUDE_H
@@ -15,10 +16,10 @@ class Strategy : public BaseStrategy {
             return 2;
         }
         virtual void decisions() {
-
+            std::cout << "Strátegia basica aqui executada" << std::endl;
         }
     private:
-    
+
 };
 
 #endif

@@ -15,7 +15,7 @@ class Game {
     private:
         int score1, score2, pauseCondition;
         void printScore();
-        StrategyManager strategy;
+        StrategyManager* strategy;
 };
 
 #endif

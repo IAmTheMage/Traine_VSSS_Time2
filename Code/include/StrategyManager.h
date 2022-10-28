@@ -3,6 +3,7 @@
 #include "unordered_map"
 #include "Strategy.h"
 #include "string"
+#include "memory"
 
 #ifndef STRATEGY_MANAGER_INCLUDE_H
 #define STRATEGY_MANAGER_INCLUDE_H

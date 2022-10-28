@@ -15,19 +15,13 @@ Utils::~Utils()
 
 }
 
-
-void Utils::setDist(float x1, float y1, float x2, float y2)
+float Utils::getDist(Point2f p1, Point2f p2)
 {
-    float d;
+    Point2f variacao;           // x2-x1 ou y2-y1
+    variacao.x = p1.x - p2.x;
+    variacao.y = p1.y - p2.y;
 
-    d = sqrt(pow(x1-x2, 2) + pow(y1-y2, 2));
-    dist = d;
-}
-
-
-void Utils::getDist()
-{
-    std::cout << "The distance is: " << dist << std::endl;
+    return sqrt(pow(variacao.x, 2) + pow(variacao.y, 2));
 }
 
 float Utils::getAngle(Point2f p1, Point2f p2) {

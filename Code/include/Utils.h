@@ -16,8 +16,7 @@ class Utils
 
         Point2f getPos();
 
-        void setDist(float x1, float y1, float x2, float y2);
-        void getDist();
+        static float getDist(Point2f p1, Point2f p2);
 
         static float getAngle(Point2f p1, Point2f p2);
 };

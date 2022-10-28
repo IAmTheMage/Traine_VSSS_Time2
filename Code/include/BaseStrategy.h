@@ -1,4 +1,5 @@
 #include "Structdorobo.h"
+#include "memory"
 
 
 #ifndef BASE_STRATEGY_INCLUDE_H
@@ -22,12 +23,18 @@ class BaseStrategy {
         virtual void decisions() {
 
         }
+
+        void setBall(std::shared_ptr<Object<void*>> _ball) {
+            this->ball = _ball;
+        }
     private:
         Point2f centroidAtk;
         Point2f centroidDef;
         Object<Robot>* team1; 
         Object<Robot>* team2; 
-        Object<void*> ball;
+        
+    protected:
+        std::shared_ptr<Object<void*>> ball;
 };
 
 #endif

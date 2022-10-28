@@ -16,7 +16,7 @@ class Strategy : public BaseStrategy {
             return 2;
         }
         virtual void decisions() {
-            std::cout << "Strátegia basica aqui executada" << std::endl;
+            std::cout << "Strátegia basica aqui executada com a posicao da bola: { " << this->ball->pos.x << ',' << this->ball->pos.y << " }" << std::endl << std::endl;
         }
     private:
 

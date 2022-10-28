@@ -5,17 +5,13 @@
 
 class Utils
 {
-    private:
-        float x1, y1;       // pos inicial
-        float x2, y2;       // meta
-        float dist;
-
     public:
-        Utils(Robot);
+        Utils();
         ~Utils();
 
-        void setDist(float x1, float x2, float y1, float y2);
-        void getDist();
+        Point2f getPos();
+
+        static float getDist(Point2f p1, Point2f p2);
 };
 
 #endif

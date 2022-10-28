@@ -7,7 +7,9 @@
 
 class BaseStrategy {
     public:
-        BaseStrategy(/*Object<Robot> team1[3], Object<Robot> team2[3], Object<void> ball*/);
+        BaseStrategy(std::shared_ptr<Object<void*>> ball,std::shared_ptr<Object<Robot>*> myTeamRobots, 
+        std::shared_ptr<Object<Robot>*> anotherTeamRobots);
+        
         ~BaseStrategy();
 
         virtual int gooalkeper() {
@@ -30,11 +32,11 @@ class BaseStrategy {
     private:
         Point2f centroidAtk;
         Point2f centroidDef;
-        Object<Robot>* team1; 
-        Object<Robot>* team2; 
-        
+
     protected:
         std::shared_ptr<Object<void*>> ball;
+        std::shared_ptr<Object<Robot>*> myTeamRobots;
+        std::shared_ptr<Object<Robot>*> anotherTeamRobots;
 };
 
 #endif

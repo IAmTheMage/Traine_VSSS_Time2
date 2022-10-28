@@ -5,9 +5,8 @@ Game::Game(int argc, char** argv) {
         this->pauseCondition = atoi(argv[1]);
     }
     instance();
-    Strategy* _strategy = new Strategy();
+    Strategy* _strategy = new Strategy(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
-    _strategy->setBall(this->ball);
     this->strategy->addStrategy("Primeira estrategia",_strategy);
     this->strategy->setStrategy("Primeira estrategia");
 }
@@ -24,6 +23,8 @@ void Game::instance() {
     this->ball = std::make_shared<Object<void*>>();
     ball->pos = {75, 65};
     ball->speed = {0.0f, 0.0f};
+    this->team1Robots = std::make_shared<Object<Robot>*>(new Robot[3]);
+    this->team2Robots = std::make_shared<Object<Robot>*>(new Robot[3]);
 }
 
 void Game::run() {

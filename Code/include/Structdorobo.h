@@ -4,8 +4,8 @@
 
 struct Point2f
 {
-    int x = 0;
-    int y = 0;
+    float x = 0;
+    float y = 0;
 };
 
 
@@ -25,7 +25,6 @@ struct Robot
 
     int index;
     float orientation;
-
 };
 
 #endif

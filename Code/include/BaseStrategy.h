@@ -14,8 +14,6 @@ class BaseStrategy {
         BaseStrategy(std::shared_ptr<Object<void*>> ball,std::shared_ptr<Object<Robot>*> myTeamRobots, 
         std::shared_ptr<Object<Robot>*> anotherTeamRobots);
         
-        BaseStrategy();
-        
         ~BaseStrategy();
 
         virtual int gooalkeper() {

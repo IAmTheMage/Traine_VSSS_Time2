@@ -3,8 +3,6 @@
 #include <iostream>
 #include <cmath>
 
-#define PI 3.1415926536
-
 Utils::Utils(Robot robo)
 {
 
@@ -29,5 +27,5 @@ float Utils::getAngle(Point2f p1, Point2f p2) {
     dir.x = p2.x - p1.x;
     dir.y = p2.y - p1.y;
 
-    return atan2(dir.y, dir.x) * 180 / PI;
+    return atan2(dir.y, dir.x) * 180 / M_PI;
 }

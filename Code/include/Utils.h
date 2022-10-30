@@ -19,6 +19,8 @@ class Utils
         static float getDist(Point2f p1, Point2f p2);
 
         static float getAngle(Point2f p1, Point2f p2);
+
+        static int getQuadrant(Point2f p);
 };
 
 #endif

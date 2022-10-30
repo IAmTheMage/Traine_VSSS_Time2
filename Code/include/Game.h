@@ -3,7 +3,7 @@
 #include "StrategyManager.h"
 #include "memory"
 #include "thread"
-#include "json.hpp"
+#include "DataManager.hpp"
 #include "fstream"
 
 using json = nlohmann::json;
@@ -14,7 +14,7 @@ using json = nlohmann::json;
 class Game {
     public:
         Game(int argc, char** argv);
-        Game();
+        Game();    
         ~Game();
         void run();
         void display();

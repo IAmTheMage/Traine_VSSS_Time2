@@ -1,5 +1,12 @@
 {
     "gameWidth": 150,
     "gameHeight": 130,
-    "pauseCondition": 1000
+    "pauseCondition": 1000,
+    "robotsPositions": {
+        "team1": [
+            {
+                "x": "45"
+            }
+        ]
+    }
 }

@@ -18,9 +18,10 @@ struct Vel
 
 struct Robot
 {
-    Point2f goal;
+    Point2f pos;
+    Vel speed;
     int index;
-    float orientation;
+    float mass, forward = 0;
 };
 
 template<typename T>

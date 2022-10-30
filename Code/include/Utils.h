@@ -11,7 +11,7 @@ class Utils
         float dist;
 
     public:
-        Utils(Robot);
+        Utils();
         ~Utils();
 
         Point2f getPos();

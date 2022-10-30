@@ -2,6 +2,7 @@
 #include "Structdorobo.h"
 #include "StrategyManager.h"
 #include "memory"
+#include "thread"
 
 #ifndef GAME_INCLUDE_H
 #define GAME_INCLUDE_H
@@ -19,8 +20,8 @@ class Game {
     private:
         int score1, score2, pauseCondition;
         std::shared_ptr<Object<void*>> ball;
-        std::shared_ptr<Object<Robot>*> team1Robots;
-        std::shared_ptr<Object<Robot>*> team2Robots;
+        Object<Robot> team1Robots[3];
+        Object<Robot> team2Robots[3];
         void printScore();
         StrategyManager* strategy;
         void instance();

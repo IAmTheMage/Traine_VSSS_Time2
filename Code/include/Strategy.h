@@ -6,8 +6,8 @@
 
 class Strategy : public BaseStrategy {
     public:
-        Strategy(std::shared_ptr<Object<void*>> ball,std::shared_ptr<Object<Robot>*> myTeamRobots, 
-        std::shared_ptr<Object<Robot>*> anotherTeamRobots) : BaseStrategy( ball, myTeamRobots, 
+        Strategy(std::shared_ptr<Object<void*>> ball,Object<Robot>* myTeamRobots, 
+        Object<Robot>* anotherTeamRobots) : BaseStrategy( ball, myTeamRobots, 
         anotherTeamRobots) {
 
         }

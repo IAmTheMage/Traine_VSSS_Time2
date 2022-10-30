@@ -11,8 +11,8 @@ class BaseStrategy {
         Point2f centroidDef;
 
     public:
-        BaseStrategy(std::shared_ptr<Object<void*>> ball,std::shared_ptr<Object<Robot>*> myTeamRobots, 
-        std::shared_ptr<Object<Robot>*> anotherTeamRobots);
+        BaseStrategy(std::shared_ptr<Object<void*>> ball,Object<Robot>* myTeamRobots, 
+        Object<Robot>* anotherTeamRobots);
         
         ~BaseStrategy();
 
@@ -36,8 +36,8 @@ class BaseStrategy {
 
     protected:
         std::shared_ptr<Object<void*>> ball;
-        std::shared_ptr<Object<Robot>*> myTeamRobots;
-        std::shared_ptr<Object<Robot>*> anotherTeamRobots;
+        Object<Robot>* myTeamRobots;
+        Object<Robot>* anotherTeamRobots;
 };
 
 #endif

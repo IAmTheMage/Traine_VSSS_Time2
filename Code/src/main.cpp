@@ -1,4 +1,4 @@
-// #include "../include/Game.h"
+#include "../include/Game.h"
 #include "../include/Utils.h"
 #include "../include/Movement.h"
 
@@ -22,9 +22,9 @@ void move(Robot &obj) {
     obj.speed.dir = 7;
 }
 
-int main() {
-    Robot player = {{12, 5}, {0, 0}, 0, 0.4};
-    Robot ball = {{100, 98}, {0, 0}, 0, 0.047};
+void movementTest() {
+    Object<Robot> player = {{12, 5}, {0, 0}, 0, 0.4};
+    Object<Robot> ball = {{100, 98}, {0, 0}, 0, 0.047};
     Movement move;
 
     float time = 10;
@@ -73,6 +73,15 @@ int main() {
 
         tP = t; n = (int) t;
     }
+}
 
+void strategyTest(int argc, char** argv) {
+    std::cout << "Main" << std::endl;
+    Game* game = new Game(argc, argv);
+    game->run();
+}
+
+int main(int argc, char** argv) {
+    strategyTest(argc, argv);
     return 0;
 }

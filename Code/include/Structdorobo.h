@@ -21,7 +21,6 @@ struct Robot
     Point2f pos;
     Vel speed;
     int index;
-    float mass, forward = 0;
 };
 
 template<typename T>
@@ -29,6 +28,7 @@ struct Object {
     T includedData;
     Vel speed;
     Point2f pos;
+    float mass, forward = 0;
 };
 
 #endif

@@ -1,0 +1,1 @@
+cd Code && cd src && g++ -O3 main.cpp StrategyManager.cpp Utils.cpp BaseStrategy.cpp Strategy.cpp Game.cpp Movement.cpp -o main && ./main 10

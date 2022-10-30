@@ -7,7 +7,7 @@
 Movement::Movement() {}
 Movement::~Movement() {}
 
-void Movement::moveRobot(Robot &obj, float dt) {
+void Movement::moveRobot(Object<Robot> &obj, float dt) {
     float dir, V = obj.speed.dir;
     dir = obj.speed.esq * obj.speed.dir;
 
@@ -24,7 +24,7 @@ void Movement::moveRobot(Robot &obj, float dt) {
     while (obj.forward < 0) {obj.forward += 360;}
 }
 
-bool Movement::turn(Robot &obj, Point2f limits, float t0) {
+bool Movement::turn(Object<Robot> &obj, Point2f limits, float t0) {
     float angle = limits.y - limits.x;
     float w = speeds[1] * 0.9/M_PI;
     float t, time = sqrt(pow(angle, 2)) / w;
@@ -48,7 +48,7 @@ bool Movement::turn(Robot &obj, Point2f limits, float t0) {
     }
 }
 
-bool Movement::run(Robot &obj, Point2f goal, float t0) {
+bool Movement::run(Object<Robot> &obj, Point2f goal, float t0) {
     float d, V;
     d = Utils::getDist(obj.pos, goal);
     V = (4 / (1 + exp(-d)) - 2) * speeds[0];

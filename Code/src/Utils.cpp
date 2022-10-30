@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 
-Utils::Utils(Robot robo)
+Utils::Utils()
 {
 
 }

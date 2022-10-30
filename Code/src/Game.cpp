@@ -16,15 +16,14 @@ Game::Game() {
 }
 
 Game::~Game() {
-
 }
 
 void Game::instance() {
     this->ball = std::make_shared<Object<void*>>();
     ball->pos = {75, 65};
     ball->speed = {0.0f, 0.0f};
-    this->team1Robots = std::make_shared<Object<Robot>*>(new Robot[3]);
-    this->team2Robots = std::make_shared<Object<Robot>*>(new Robot[3]);
+    for(int i = 0; i < 3; i++) {
+    }
 }
 
 void Game::run() {

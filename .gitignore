@@ -1,5 +1,3 @@
 .vscode
 *.sh
-/Code
-/src
-/build
+/Code/src/build

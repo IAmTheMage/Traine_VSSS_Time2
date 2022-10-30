@@ -9,6 +9,9 @@ Game::Game(int argc, char** argv) {
     this->strategy = new StrategyManager();
     this->strategy->addStrategy("Primeira estrategia",_strategy);
     this->strategy->setStrategy("Primeira estrategia");
+    std::ifstream ifs("config.json");
+    config = json::parse(ifs);
+    std::cout << "Size w: " << config["gameWidth"] << std::endl << std::endl << "Game height: " << config["gameHeight"] << std::endl << std::endl;
 }
 
 Game::Game() {
@@ -26,14 +29,15 @@ void Game::instance() {
     }
 }
 
+
 void Game::run() {
-    bool isRunning = true;
-    if(pauseCondition != 0) {
-        isRunning = score1 < pauseCondition && score2 < pauseCondition;
-    }
+    pauseCondition = config["pauseCondition"];
+    std::cout << "Pause condition: " << pauseCondition << std::endl << std::endl;
+    bool isRunning = score1 < pauseCondition && score2 < pauseCondition;
     while(isRunning) {
         display();
         this->strategy->deduce();
+        isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }
 

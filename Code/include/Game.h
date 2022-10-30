@@ -3,6 +3,10 @@
 #include "StrategyManager.h"
 #include "memory"
 #include "thread"
+#include "json.hpp"
+#include "fstream"
+
+using json = nlohmann::json;
 
 #ifndef GAME_INCLUDE_H
 #define GAME_INCLUDE_H
@@ -25,6 +29,7 @@ class Game {
         void printScore();
         StrategyManager* strategy;
         void instance();
+        json config;
 };
 
 #endif

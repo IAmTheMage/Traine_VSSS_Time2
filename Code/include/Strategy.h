@@ -1,6 +1,10 @@
 #include "BaseStrategy.h"
 #include "iostream"
 
+#define BASE_GOOALKEPER_ROBOT 0
+#define BASE_DEFENDER_ROBOT 1
+#define BASE_STRIKER_ROBOT 2
+
 #ifndef STRATEGY_INCLUDE_H
 #define STRATEGY_INCLUDE_H
 
@@ -25,7 +29,7 @@ class Strategy : public BaseStrategy {
             std::cout << "Strátegia basica aqui executada com a posicao da bola: { " << this->ball->pos.x << ',' << this->ball->pos.y << " }" << std::endl << std::endl;
         }
     private:
-
+        
 };
 
 #endif

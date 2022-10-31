@@ -33,7 +33,7 @@ float Utils::getAngle(Point2f p1, Point2f p2) {
 int Utils::getQuadrant(Point2f p) {
     float x_axis = 150 / 3;     // tam de um quadrante
     float y_axis = 130 / 3;
-    int lin, col;
+    int lin = 0, col = 0;
 
     int mat[3][3] = {1, 2, 3,
                      4, 5, 6,
@@ -74,7 +74,7 @@ int Utils::getQuadrant(Point2f p) {
         lin = 1;
     }
 
-    else if(p.y > 0 && p.y < y_axis) {
+    else if(p.y >= 0 && p.y < y_axis) {
         lin = 2;
     }
 
@@ -89,7 +89,6 @@ int Utils::getQuadrant(Point2f p) {
     else if(p.x > 2 * x_axis && p.x < 150) {
         col = 2;
     }
-
     return mat[lin][col];
 
     // val q podem ser retornados:

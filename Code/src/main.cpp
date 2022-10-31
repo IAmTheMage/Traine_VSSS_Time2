@@ -82,6 +82,8 @@ void strategyTest(int argc, char** argv) {
 }
 
 int main(int argc, char** argv) {
-    strategyTest(argc, argv);
+    Point2f f = {20, 100};
+    std::cout << Utils::getQuadrant(f) << std::endl << std::endl;
+    //strategyTest(argc, argv);
     return 0;
 }

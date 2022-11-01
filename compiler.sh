@@ -1,1 +1,1 @@
-cd Code && cd src && g++ -O3 main.cpp StrategyManager.cpp Utils.cpp BaseStrategy.cpp Strategy.cpp Game.cpp Movement.cpp -o main && ./main
+cd Code && cd src && g++ -O3 main.cpp StrategyManager.cpp Utils.cpp BaseStrategy.cpp Strategy.cpp Game.cpp Movement.cpp -lsfml-system -lsfml-window -lsfml-graphics -o main && ./main

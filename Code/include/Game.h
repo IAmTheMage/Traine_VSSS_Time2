@@ -5,6 +5,7 @@
 #include "thread"
 #include "DataManager.hpp"
 #include "fstream"
+#include "Graphics.h"
 
 using json = nlohmann::json;
 
@@ -30,6 +31,9 @@ class Game {
         StrategyManager* strategy;
         void instance();
         json config;
+        #ifdef GRAPHICAL_USE
+        Graphics* graph;
+        #endif
 };
 
 #endif

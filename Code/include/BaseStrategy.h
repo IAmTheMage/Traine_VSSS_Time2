@@ -16,14 +16,14 @@ class BaseStrategy {
         
         ~BaseStrategy();
 
-        virtual int gooalkeper() {
-            return 0;
+        virtual void gooalkeper() {
+
         }
-        virtual int defender() {
-            return 1;
+        virtual void defender() {
+
         }
-        virtual int striker() {
-            return 2;
+        virtual void striker() {
+
         }
 
         virtual void decisions() {

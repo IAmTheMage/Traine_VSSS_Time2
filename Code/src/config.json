@@ -2,6 +2,18 @@
     "gameWidth": 150,
     "gameHeight": 130,
     "pauseCondition": 1000,
+    "colors": {
+        "team1": {
+            "r": 255,
+            "g": 127,
+            "b": 80 
+        },
+        "team2": {
+            "r": 255,
+            "g": 127,
+            "b": 80 
+        }
+    },
     "robotsPositions": {
         "team1": [
             {

@@ -25,10 +25,10 @@ struct Robot
 
 template<typename T>
 struct Object {
-    T includedData;
     Vel speed;
     Point2f pos;
     float mass, forward = 0;
+    T includedData;
 };
 
 #endif

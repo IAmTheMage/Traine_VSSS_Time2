@@ -1,5 +1,6 @@
 #include "BaseStrategy.h"
 #include "iostream"
+#include "Utils.h"
 
 #define BASE_GOOALKEPER_ROBOT 0
 #define BASE_DEFENDER_ROBOT 1
@@ -13,23 +14,29 @@ class Strategy : public BaseStrategy {
         Strategy(std::shared_ptr<Object<void*>> ball,Object<Robot>* myTeamRobots, 
         Object<Robot>* anotherTeamRobots) : BaseStrategy( ball, myTeamRobots, 
         anotherTeamRobots) {
+            gooalkeperSelected = new Object<Robot>();
+            gooalkeperSelected = &myTeamRobots[BASE_GOOALKEPER_ROBOT];
+        }
+        
+        void gooalkeper() {
+            const int quadrant = Utils::getQuadrant(ball->pos);
+            if(quadrant == 1 || quadrant == 4 || quadrant == 7) {
+                gooalkeperSelected->pos = {0, 65};
+            }
+        }
+        void defender() {
 
         }
-        
-        int gooalkeper() {
-            return 0;
+        void striker() {
+
         }
-        int defender() {
-            return 1;
-        }
-        int striker() {
-            return 2;
-        }
+
         void decisions() {
-            std::cout << "Strátegia basica aqui executada com a posicao da bola: { " << this->ball->pos.x << ',' << this->ball->pos.y << " }" << std::endl << std::endl;
+            gooalkeper();
         }
+
     private:
-        
+        Object<Robot>* gooalkeperSelected;
 };
 
 #endif

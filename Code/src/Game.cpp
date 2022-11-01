@@ -23,18 +23,22 @@ void Game::instance() {
     std::ifstream ifs("config.json");
     config = json::parse(ifs);
     this->ball = std::make_shared<Object<void*>>();
-    ball->pos = {75, 65};
+    ball->pos = {config["ball"]["x"], config["ball"]["y"]};
     ball->speed = {0.0f, 0.0f};
+    
+    #ifdef GRAPHICAL_USE
+    graph = new Graphics(ball);
+    #endif
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
         team2Robots[i].pos = {config["robotsPositions"]["team2"][i]["x"], config["robotsPositions"]["team2"][i]["y"]};
     }
+    #ifdef GRAPHICAL_USE
     for(int i = 0; i < 3; i++) {
-        std::cout << "Posicao do robo " << i << " do time 1 " << "{ " << team1Robots[i].pos.x << " , " << team1Robots[i].pos.y << " }" << std::endl << std::endl;
+        graph->trackRobot(&team1Robots[i]);
+        graph->trackRobot(&team2Robots[i]);
     }
-    for(int i = 0; i < 3; i++) {
-        std::cout << "Posicao do robo " << i << " do time 2 " << "{ " << team2Robots[i].pos.x << " , " << team2Robots[i].pos.y << " }" << std::endl << std::endl;
-    }
+    #endif
 }
 
 
@@ -42,9 +46,16 @@ void Game::run() {
     pauseCondition = config["pauseCondition"];
     std::cout << "Pause condition: " << pauseCondition << std::endl << std::endl;
     bool isRunning = score1 < pauseCondition && score2 < pauseCondition;
+    int coeficient = 1;
     while(isRunning) {
-        //display();
-        //this->strategy->deduce();
+        #ifdef GRAPHICAL_USE
+        graph->render();
+        #endif
+        ball->pos.y += 1 * coeficient;
+        if(ball->pos.y > 120) coeficient = -1;
+        else if(ball->pos.y < 10) coeficient = 1;
+        display();
+        this->strategy->deduce();
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }

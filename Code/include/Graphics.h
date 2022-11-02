@@ -2,7 +2,12 @@
 
 #ifdef GRAPHICAL_USE
 
-#include "SFML/Graphics.hpp"
+#ifdef _WIN64
+    #include "./SFML/Graphics.hpp"
+#else
+    #include "SFML/Graphics.hpp"
+#endif
+
 #include "memory"
 #include "vector"
 #include "Structdorobo.h"

@@ -15,27 +15,25 @@ struct Vel
     float dir;      // roda direita
 };
 
+struct Color {
+    int r;
+    int g;
+    int b;
+};
 
 struct Robot
 {
-    Point2f pos;
-    Vel speed;
-    int index;
+    Color color;
 };
 
 template<typename T>
 struct Object {
     Vel speed;
     Point2f pos;
-    float mass, forward = 0;
+    float mass, forward = 90;
     bool moving = true;
     T includedData;
 };
 
-struct Color {
-    int r;
-    int g;
-    int b;
-};
 
 #endif

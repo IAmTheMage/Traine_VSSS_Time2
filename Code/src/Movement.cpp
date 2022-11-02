@@ -39,7 +39,7 @@ void Movement::moveRobot(Object<Robot> &obj, float dt, bool moving) {
     Va = (obj.speed.dir - obj.speed.esq) * 45/M_PI;
 
     obj.pos.x += Vl*dir.x * dt;
-    obj.pos.y += Vl*dir.x * dt;
+    obj.pos.y += Vl*dir.y * dt;
     obj.forward += Va*dt;
 
     while (obj.forward > 180) {obj.forward -= 360;}
@@ -92,7 +92,7 @@ bool Movement::run(Object<Robot> &obj, Point2f goal, float offset) {
     float limit = 2 * pow(speeds[0], 2) / (gravity * friction);
 
     if (d > limit + offset) {
-        obj.speed.dir = speeds[10];
+        obj.speed.dir = speeds[0];
         obj.speed.esq = speeds[0];
         return false;
     }
@@ -101,6 +101,11 @@ bool Movement::run(Object<Robot> &obj, Point2f goal, float offset) {
         obj.speed.esq = 0;
         return true;
     }
+}
+
+void Movement::applySpeed(Object<Robot> &obj, float coeficient) {
+    obj.speed.dir = speeds[0] * coeficient;
+    obj.speed.esq = speeds[0] * coeficient;
 }
 
 bool Movement::chase(Object<Robot> &obj, Point2f goal, bool test) {

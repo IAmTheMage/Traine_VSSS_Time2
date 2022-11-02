@@ -16,9 +16,10 @@ class BaseStrategy {
         Object<Robot>* anotherTeamRobots);
         
         ~BaseStrategy();
+        
 
         virtual void gooalkeper() {
-
+            
         }
         virtual void defender() {
 

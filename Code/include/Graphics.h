@@ -19,7 +19,7 @@
 
 class Graphics {
     public:
-        Graphics(std::shared_ptr<Object<void*>> ball, Color team1Color, Color team2Color) {
+        Graphics(std::shared_ptr<Object<void*>> ball) {
             window = std::make_unique<sf::RenderWindow>(sf::VideoMode(GAME_WIDTH * RENDER_COEFICIENT, GAME_HEIGHT * RENDER_COEFICIENT), "VSSS");
             window->setFramerateLimit(60);
             this->ball = ball;
@@ -32,13 +32,17 @@ class Graphics {
                 if(event.type == sf::Event::Closed) window->close();
             }
             drawMap();
-            sf::CircleShape ballRepresentation(3 * RENDER_COEFICIENT);
+            sf::CircleShape ballRepresentation(2.135 * RENDER_COEFICIENT);
             ballRepresentation.setPosition(sf::Vector2f(ball->pos.x * RENDER_COEFICIENT, ball->pos.y * RENDER_COEFICIENT));
             ballRepresentation.setFillColor(sf::Color(255,127,80));
             for(Object<Robot>* _robot : robots) {
-                sf::RectangleShape shape(sf::Vector2f(10 * RENDER_COEFICIENT, 10 * RENDER_COEFICIENT));
+                sf::RectangleShape shape(sf::Vector2f(8 * RENDER_COEFICIENT, 8 * RENDER_COEFICIENT));
                 shape.setPosition(sf::Vector2f(_robot->pos.x * RENDER_COEFICIENT, _robot->pos.y * RENDER_COEFICIENT));
-                shape.setFillColor(sf::Color(238,130,238));
+                shape.setFillColor(sf::Color(_robot->includedData.color.r, 
+                _robot->includedData.color.g, 
+                _robot->includedData.color.b));
+                shape.setOrigin(sf::Vector2f(8, 8));
+                shape.setRotation(_robot->forward);
                 window->draw(shape);
             }
             window->draw(ballRepresentation);

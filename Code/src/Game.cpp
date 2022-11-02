@@ -29,7 +29,11 @@ void Game::instance() {
     #ifdef GRAPHICAL_USE
     Color team1Color = {config["colors"]["team1"]["r"], config["colors"]["team1"]["g"], config["colors"]["team1"]["b"]};
     Color team2Color = {config["colors"]["team2"]["r"], config["colors"]["team2"]["g"], config["colors"]["team2"]["b"]};
-    graph = new Graphics(ball, team1Color, team2Color);
+    for(int i = 0; i < 3; i++) {
+        team1Robots[i].includedData.color = team1Color;
+        team2Robots[i].includedData.color = team2Color;
+    }
+    graph = new Graphics(ball);
     #endif
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
@@ -48,14 +52,10 @@ void Game::run() {
     pauseCondition = config["pauseCondition"];
     std::cout << "Pause condition: " << pauseCondition << std::endl << std::endl;
     bool isRunning = score1 < pauseCondition && score2 < pauseCondition;
-    int coeficient = 1;
     while(isRunning) {
         #ifdef GRAPHICAL_USE
         graph->render();
         #endif
-        ball->pos.y += 1 * coeficient;
-        if(ball->pos.y > 120) coeficient = -1;
-        else if(ball->pos.y < 10) coeficient = 1;
         display();
         this->strategy->deduce();
         isRunning = score1 < pauseCondition && score2 < pauseCondition;

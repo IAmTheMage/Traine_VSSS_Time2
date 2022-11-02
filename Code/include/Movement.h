@@ -22,6 +22,7 @@ class Movement {
         bool chase(Object<Robot> &obj, Point2f goal, bool test);
         bool wallCollision(Object<Robot> obj, float limits[], float offset);
         bool objCollision(Object<Robot> obj1, Point2f obj2, float offset);
+        void applySpeed(Object<Robot> &obj, float coeficient); 
 };
 
 #endif

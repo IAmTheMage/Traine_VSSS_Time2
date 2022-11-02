@@ -6,19 +6,22 @@
 class Movement {
     private:
         float speeds[3];
+        float friction, gravity;
     
     public:
         Movement();
         ~Movement();
 
-        void moveRobot(Object<Robot> &obj, float dt);
-        bool turn(Object<Robot> &obj, Point2f limits, float t0);
-        bool run(Object<Robot> &obj, Point2f goal, float t0);
-        void chase(Object<Robot> &obj, Point2f goal, bool Switch, float startTime);
-        int kick(Object<Robot> &obj, char direction, float time, float t0);
+        void moveRobot(Object<Robot> &obj, float dt, bool moving);
+        void kick(Object<Robot> &obj, Object<void*> ball, float val[], bool t[]);
+        void getValues(float val[]);
+        void setValues(float val[]);
 
-        void getSpeeds(float val[]);
-        void setSpeeds(float val[]);
+        bool lookAt(Object<Robot> &obj, float angle);
+        bool run(Object<Robot> &obj, Point2f goal, float offset);
+        bool chase(Object<Robot> &obj, Point2f goal, bool test);
+        bool wallCollision(Object<Robot> obj, float limits[], float offset);
+        bool objCollision(Object<Robot> obj1, Point2f obj2, float offset);
 };
 
 #endif

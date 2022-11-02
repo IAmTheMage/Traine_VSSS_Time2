@@ -27,7 +27,9 @@ void Game::instance() {
     ball->speed = {0.0f, 0.0f};
     
     #ifdef GRAPHICAL_USE
-    graph = new Graphics(ball);
+    Color team1Color = {config["colors"]["team1"]["r"], config["colors"]["team1"]["g"], config["colors"]["team1"]["b"]};
+    Color team2Color = {config["colors"]["team2"]["r"], config["colors"]["team2"]["g"], config["colors"]["team2"]["b"]};
+    graph = new Graphics(ball, team1Color, team2Color);
     #endif
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};

@@ -9,6 +9,8 @@ BaseStrategy::BaseStrategy(std::shared_ptr<Object<void*>> _ball,
     
     centroidAtk = {160, 65};
     centroidDef = {10, 65};
+
+    movement = new Movement();
 }
 
 

@@ -19,7 +19,7 @@
 
 class Graphics {
     public:
-        Graphics(std::shared_ptr<Object<void*>> ball) {
+        Graphics(std::shared_ptr<Object<void*>> ball, Color team1Color, Color team2Color) {
             window = std::make_unique<sf::RenderWindow>(sf::VideoMode(GAME_WIDTH * RENDER_COEFICIENT, GAME_HEIGHT * RENDER_COEFICIENT), "VSSS");
             window->setFramerateLimit(60);
             this->ball = ball;
@@ -77,6 +77,8 @@ class Graphics {
         std::unique_ptr<sf::RenderWindow> window;
         std::vector<Object<Robot>*> robots;
         std::shared_ptr<Object<void*>> ball;
+        Color _team1Color;
+        Color _team2Color;
 };
 
 #endif

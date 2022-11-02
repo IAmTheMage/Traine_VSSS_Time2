@@ -1,5 +1,6 @@
 #include "Structdorobo.h"
 #include "memory"
+#include "Movement.h"
 
 
 #ifndef BASE_STRATEGY_INCLUDE_H
@@ -38,6 +39,7 @@ class BaseStrategy {
         std::shared_ptr<Object<void*>> ball;
         Object<Robot>* myTeamRobots;
         Object<Robot>* anotherTeamRobots;
+        Movement* movement;
 };
 
 #endif

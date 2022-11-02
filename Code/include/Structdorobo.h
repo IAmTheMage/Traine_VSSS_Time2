@@ -31,4 +31,10 @@ struct Object {
     T includedData;
 };
 
+struct Color {
+    int r;
+    int g;
+    int b;
+};
+
 #endif

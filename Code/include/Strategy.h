@@ -21,7 +21,12 @@ class Strategy : public BaseStrategy {
         void gooalkeper() {
             const int quadrant = Utils::getQuadrant(ball->pos);
             if(quadrant == 1 || quadrant == 4 || quadrant == 7) {
-                gooalkeperSelected->pos = {0, 65};
+                if(gooalkeperSelected->pos.y >= 30 && gooalkeperSelected->pos.y <= 100) {
+                    std::cout << "MOVER MOVER MOVER" << std::endl;
+                    float speeds[3] = {50.0f, 50.0f, 50.0f};
+                    movement->setSpeeds(speeds);
+                    movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], 0.6);
+                }
             }
         }
         void defender() {

@@ -3,7 +3,7 @@
 #ifdef GRAPHICAL_USE
 
 #ifdef _WIN64
-    #include "./SFML/Graphics.hpp"
+    #include "./SFML/include/Graphics.hpp"
 #else
     #include "SFML/Graphics.hpp"
 #endif

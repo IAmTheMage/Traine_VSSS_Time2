@@ -28,6 +28,7 @@ struct Object {
     Vel speed;
     Point2f pos;
     float mass, forward = 0;
+    bool moving = true;
     T includedData;
 };
 

@@ -23,7 +23,7 @@ class Game {
         void offenseFault();
         void defenseFault();
     private:
-        int score1, score2, pauseCondition;
+        int score1 = 0, score2 = 0, pauseCondition;
         std::shared_ptr<Object<void*>> ball;
         Object<Robot> team1Robots[3];
         Object<Robot> team2Robots[3];

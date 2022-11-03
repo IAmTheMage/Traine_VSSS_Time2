@@ -1,2 +1,4 @@
 .vscode
 Code/src/build
+*.o
+*.exe

@@ -2,8 +2,8 @@
 
 #ifdef GRAPHICAL_USE
 
-#ifdef _WIN64
-    #include "./SFML/Graphics.hpp"
+#ifdef _WIN32
+    #include "SFML/include/SFML/Graphics.hpp"
 #else
     #include "SFML/Graphics.hpp"
 #endif

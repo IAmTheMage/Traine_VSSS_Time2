@@ -1,5 +1,11 @@
 #include "../include/Game.h"
 
+#ifdef _WIN32
+    #define CONFIG_PATH "src/config.json"
+#else
+    #define CONFIG_PATH "config.json"
+#endif
+
 Game::Game(int argc, char** argv) {
     if(argc > 1) {
         this->pauseCondition = atoi(argv[1]);
@@ -20,7 +26,7 @@ Game::~Game() {
 }
 
 void Game::instance() {
-    std::ifstream ifs("config.json");
+    std::ifstream ifs(CONFIG_PATH);
     config = json::parse(ifs);
     this->ball = std::make_shared<Object<void*>>();
     ball->pos = {config["ball"]["x"], config["ball"]["y"]};

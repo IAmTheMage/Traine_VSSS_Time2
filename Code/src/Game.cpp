@@ -15,6 +15,12 @@ Game::Game(int argc, char** argv) {
     this->strategy = new StrategyManager();
     this->strategy->addStrategy("Primeira estrategia",_strategy);
     this->strategy->setStrategy("Primeira estrategia");
+
+    Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
+    this->strategy = new StrategyManager();
+    this->strategy->addStrategy("Passe",_pass);
+    this->strategy->setStrategy("Passe");
+
     std::cout << "Size w: " << config["gameWidth"] << std::endl << std::endl << "Game height: " << config["gameHeight"] << std::endl << std::endl;
 }
 

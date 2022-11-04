@@ -12,17 +12,19 @@ class Movement {
         Movement();
         ~Movement();
 
-        void moveRobot(Object<Robot> &obj, float dt, bool moving);
-        void kick(Object<Robot> &obj, Object<void*> ball, float val[], bool t[]);
+        void moveRobot(Object<Robot> &obj, float dt);
+        void kick(Object<Robot> &obj, Point2f ball, float angle, float distance);
+        void applySpeed(Object<Robot> &obj, float coeficient);
         void getValues(float val[]);
         void setValues(float val[]);
 
-        bool lookAt(Object<Robot> &obj, float angle);
+        bool lookAt(Object<Robot> &obj, float angle, float limit);
         bool run(Object<Robot> &obj, Point2f goal, float offset);
-        bool chase(Object<Robot> &obj, Point2f goal, bool test);
+        bool fixAngle(Object<Robot> &obj, Point2f goal);
+        bool chase(Object<Robot> &obj, Point2f goal, float limit);
+
         bool wallCollision(Object<Robot> obj, float limits[], float offset);
         bool objCollision(Object<Robot> obj1, Point2f obj2, float offset);
-        void applySpeed(Object<Robot> &obj, float coeficient); 
 };
 
 #endif

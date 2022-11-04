@@ -24,6 +24,7 @@ struct Color {
 struct Robot
 {
     Color color;
+    char function;
 };
 
 template<typename T>

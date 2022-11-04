@@ -22,13 +22,13 @@ void Movement::setValues(float val[]) {
     gravity = val[4];
 }
 
-void Movement::moveRobot(Object<Robot> &obj, float dt, bool moving) {
-    float Vl, Va;
+void Movement::moveRobot(Object<Robot> &obj, float dt) {
+    float Vl, Vr;
     Point2f dir;
     dir.x = cos(obj.forward * M_PI/180);
     dir.y = sin(obj.forward * M_PI/180);
 
-    if (moving == false) {
+    if (obj.moving == false) {
         if (obj.speed.dir > 0) {obj.speed.dir -= gravity*friction*dt;}
         else {obj.speed.dir = 0;}
         if (obj.speed.esq > 0) {obj.speed.esq -= gravity*friction*dt;}
@@ -36,71 +36,54 @@ void Movement::moveRobot(Object<Robot> &obj, float dt, bool moving) {
     }
 
     Vl = obj.speed.dir + obj.speed.esq;
-    Va = (obj.speed.dir - obj.speed.esq) * 45/M_PI;
+    Vr = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
 
-    obj.pos.x += Vl*dir.x * dt;
-    obj.pos.y += Vl*dir.y * dt;
-    obj.forward += Va*dt;
+    obj.pos.x += dir.x * Vl*dt;
+    obj.pos.y += dir.y * Vl*dt;
+    obj.forward += Vr*dt;
 
     while (obj.forward > 180) {obj.forward -= 360;}
     while (obj.forward < -180) {obj.forward += 360;}
 }
 
-void Movement::kick(Object<Robot> &obj, Object<void*> ball, float val[], bool t[]) {
-    Point2f P_lim = {6.139, 7.404}, th_lim = {23.007, 59.993};
-    float P = (val[1] - th_lim.x) / (th_lim.y - th_lim.x) * (P_lim.y - P_lim.x) + P_lim.x;
-    float V = sqrt(2*gravity * friction * val[0]);
-    float th = Utils::getAngle(obj.pos, ball.pos);
+void Movement::kick(Object<Robot> &obj, Point2f ball, float angle, float distance) {
+    Point2f dir, goal;
+    dir.x = cos(angle * M_PI/180);
+    dir.y = sin(angle * M_PI/180);
 
-    if (t[0] == false) {t[0] = lookAt(obj, th);}
-    if (t[0] == true && t[1] == false) {run(obj, ball.pos, P);}
-    if (t[0] && t[1]) {
-        if (t[3]) {
-            obj.speed.dir = -V;
-            obj.speed.esq = V;
-        }
-        else {
-            obj.speed.dir = V;
-            obj.speed.esq = -V;
+    goal.x = ball.x - dir.x * 8;
+    goal.y = ball.y - dir.y * 8;
+
+    bool test = false;
+    float th;
+    if (test == false) {test = chase(obj, goal, 1);}
+    else {
+        th = Utils::getAngle(obj.pos, ball);
+        if (lookAt(obj, th, 0.05)) {
+            run(obj, ball, 1);
         }
     }
 }
 
-bool Movement::lookAt(Object<Robot> &obj, float angle) {
-    float th = angle - obj.forward;
-    float limit = 2 * pow(speeds[1], 2) / (gravity * friction);
+bool Movement::lookAt(Object<Robot> &obj, float angle, float limit) {
+    float th1 = abs(obj.forward), th2 = abs(angle);
+    Point2f range = {th2*(1-limit), th2*(1+limit)};
 
-    if (th > limit) {
-        obj.speed.dir = speeds[1];
-        obj.speed.esq = -speeds[1];
+    if (th1 < range.x || th1 > range.y) {
+        if (angle > 0) {obj.speed = {-speeds[1], speeds[1]};}
+        else {obj.speed = {speeds[1], -speeds[1]};}
+
         return false;
     }
-    else if (th < -limit) {
-        obj.speed.dir = -speeds[1];
-        obj.speed.esq = speeds[1];
-        return false;
-    }
-    else {
-        obj.speed.dir = 0;
-        obj.speed.esq = 0;
-        return true;
-    }
+    else {obj.speed = {0, 0}; return true;}
 }
 
 bool Movement::run(Object<Robot> &obj, Point2f goal, float offset) {
     float d = Utils::getDist(obj.pos, goal);
     float limit = 2 * pow(speeds[0], 2) / (gravity * friction);
 
-    if (d > limit + offset) {
-        obj.speed.dir = speeds[0];
-        obj.speed.esq = speeds[0];
-        return false;
-    }
-    else {
-        obj.speed.dir = 0;
-        obj.speed.esq = 0;
-        return true;
-    }
+    if (d > limit + offset) {obj.speed = {speeds[0], speeds[0]}; return false;}
+    else {obj.speed = {0, 0}; return true;}
 }
 
 void Movement::applySpeed(Object<Robot> &obj, float coeficient) {
@@ -108,22 +91,34 @@ void Movement::applySpeed(Object<Robot> &obj, float coeficient) {
     obj.speed.esq = speeds[0] * coeficient;
 }
 
-bool Movement::chase(Object<Robot> &obj, Point2f goal, bool test) {
+bool Movement::fixAngle(Object<Robot> &obj, Point2f goal) {
+    float th = Utils::getAngle(obj.pos, goal) * M_PI / 180;
+    bool test = true;
+
+    if (th > M_PI * 2/3.) {test = lookAt(obj, 180, 0.01);}
+    if (th > M_PI/3) {test = lookAt(obj, 90, 0.01);}
+    if (th < -M_PI * 2/3.) {test = lookAt(obj, -180, 0.01);}
+    if (th < -M_PI/3) {test = lookAt(obj, -90, 0.01);}
+
+    return test;
+}
+
+bool Movement::chase(Object<Robot> &obj, Point2f goal, float limit) {
     float d = Utils::getDist(obj.pos, goal);
-    float th = (Utils::getAngle(obj.pos, goal) - obj.forward) * M_PI / 180;
+    float th = (Utils::getAngle(obj.pos, goal) - obj.forward) * M_PI/180;
+    float S = 2 / (1 + exp(-abs(th))) - 1;
+    float V = speeds[0] / (1 + exp(-d));
 
-    if (th > M_PI * 2/3. || test == false) {test = lookAt(obj, 180);}
-    else if (th > M_PI/3 || test == false) {test = lookAt(obj, 90);}
-    if (th < -M_PI * 2/3. || test == false) {test = lookAt(obj, -180);}
-    else if (th < -M_PI/3 || test == false) {test = lookAt(obj, -90);}
+    float Vd, Ve;
+    if (th >= 0) {Vd = V; Ve = V * (1 - 10*S);}
+    if (th >= M_PI/2) {Vd = -V; Ve = -V * (1 - 10*S);}
+    if (th < 0) {Ve = V; Vd = V * (1 - 10*S);}
+    if (th <= -M_PI/2) {Ve = -V; Vd = -V * (1 - 10*S);}
 
-    if (test && d > 8) {
-        float Vd = (d + th*7.6) / 2;
-        float Ve = d - Vd;
+    if (d > limit) {obj.speed = {Ve, Vd}; return false;}
+    else {obj.speed = {0, 0}; return true;}
 
-        obj.speed.dir = Vd;
-        obj.speed.esq = Ve;
-    }
+    return false;
 }
 
 bool Movement::wallCollision(Object<Robot> obj, float limits[], float offset) {

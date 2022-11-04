@@ -18,7 +18,7 @@ class BaseStrategy {
         ~BaseStrategy();
         
 
-        virtual void gooalkeper() {
+        virtual void goalkeeper() {
             
         }
         virtual void defender() {

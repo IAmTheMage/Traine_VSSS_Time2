@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include <iostream>
 
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
@@ -24,7 +25,8 @@ class Movement {
         bool chase(Object<Robot> &obj, Point2f goal, float limit);
 
         bool wallCollision(Object<Robot> obj, float limits[], float offset);
-        bool objCollision(Object<Robot> obj1, Point2f obj2, float offset);
+        int objCollision(Object<Robot> objs[], Object<void*> ball, int col[][2]);
+        void momentum(Object<Robot> &obj, Object<void*> ball);
 };
 
 #endif

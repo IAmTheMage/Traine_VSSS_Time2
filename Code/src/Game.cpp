@@ -11,10 +11,10 @@ Game::Game(int argc, char** argv) {
         this->pauseCondition = atoi(argv[1]);
     }
     instance();
-    Strategy* _strategy = new Strategy(ball, team1Robots, team2Robots);
+/*     Strategy* _strategy = new Strategy(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
     this->strategy->addStrategy("Primeira estrategia",_strategy);
-    this->strategy->setStrategy("Primeira estrategia");
+    this->strategy->setStrategy("Primeira estrategia"); */
 
     Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
@@ -68,13 +68,34 @@ void Game::run() {
         #ifdef GRAPHICAL_USE
         graph->render();
         #endif
-        display();
+
         this->strategy->deduce();
+        
+        for (int i=0; i<6; i++) {
+            if (i<3) {objs[i] = team1Robots[i];}
+            else {objs[i] = team2Robots[i-3];}
+        }
+
+        //n = movement->objCollision(objs, ball, colliders);
+        //display();
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }
 
 void Game::display() {
-    std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
-    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; 
+/*     std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
+    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; */ 
+
+    for (int i=0; i<n; i++) {
+        if (colliders[i][0] != 0) {
+            if (colliders[i][1] != 0) {
+                std::cout << "Collision between objects " << colliders[i][0];
+                std::cout << " and " << colliders[i][1] << std::endl;
+            }
+            else {
+                    std::cout << "Collision between object " << colliders[i][0];
+                std::cout << " and ball" << std::endl;
+            }
+        }
+    }
 }

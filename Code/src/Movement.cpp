@@ -129,8 +129,60 @@ bool Movement::wallCollision(Object<Robot> obj, float limits[], float offset) {
     else {return false;}
 }
 
-bool Movement::objCollision(Object<Robot> obj1, Point2f obj2, float offset) {
-    float d = Utils::getDist(obj1.pos, obj2);
-    if (d < offset) {obj1.moving = false; return true;}
-    else {return false;}
+int objCollision(Object<Robot> objs[], Object<void*> ball, int col[][2]) {
+    float th;
+    Point2f dir, p1, p2;
+    int n = 0;
+
+    for (int i=0; i<6; i++) {
+        p1 = objs[i].pos;
+        for (int j=0; j<6; j++) {
+            if (i==j) {continue;}
+            p2 = objs[j].pos;
+
+            th = Utils::getAngle(p1, p2) * M_PI/180;
+            dir.x = cos(th); dir.y = sin(th);
+
+            if (Utils::getDist(p1, p2) <= 11.3137) {
+                objs[i].pos.x -= dir.x * 4.05;
+                objs[i].pos.y -= dir.y * 4.05;
+                objs[j].pos.x += dir.x * 4.05;
+                objs[j].pos.y += dir.y * 4.05;
+
+                col[n][0] = i; col[n][1] = j;
+                n++;
+            }
+        }
+
+        th = Utils::getAngle(p1, ball.pos) * M_PI/180;
+        dir.x = cos(th); dir.y = sin(th);
+
+        if (Utils::getDist(p1, ball.pos) <= 7.7919) {
+            objs[i].pos.x -= dir.x * 4.05;
+            objs[i].pos.y -= dir.y * 4.05;
+            ball.pos.x += dir.x * 2.185;
+            ball.pos.y += dir.y * 2.185;
+
+            col[n][0] = i; col[n][1] = 0;
+            n++;
+        }
+    }
+    return n;
+}
+
+void Movement::momentum(Object<Robot> &obj, Object<void*> ball) {
+    float Vo, Vb, M, th;
+    Point2f dir;
+
+    Vb = pow(ball.speed.dir, 2) + pow(ball.speed.esq, 2);
+    Vb = sqrt(Vb);
+
+    Vo = obj.speed.dir + obj.speed.esq;
+    M = obj.mass * Vo + ball.mass * Vb;
+
+    th = Utils::getAngle(obj.pos, ball.pos) * M_PI/180;
+    dir.x = cos(th); dir.y = sin(th);
+
+    ball.speed.dir = dir.y * M / ball.mass;
+    ball.speed.esq = dir.x * M / ball.mass;
 }

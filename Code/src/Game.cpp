@@ -11,19 +11,15 @@ Game::Game(int argc, char** argv) {
         this->pauseCondition = atoi(argv[1]);
     }
     instance();
-/*     Strategy* _strategy = new Strategy(ball, team1Robots, team2Robots);
+    Strategy* _strategy = new Strategy(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
     this->strategy->addStrategy("Primeira estrategia",_strategy);
-    this->strategy->setStrategy("Primeira estrategia"); */
+    this->strategy->setStrategy("Primeira estrategia");
 
     Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
-    Strategy* _pass2 = new Strategy(ball, team2Robots, team1Robots);
     this->strategy = new StrategyManager();
-    this->strategy2 = new StrategyManager();
     this->strategy->addStrategy("Passe",_pass);
     this->strategy->setStrategy("Passe");
-    this->strategy2->addStrategy("Passe",_pass2);
-    this->strategy2->setStrategy("Passe");
 
     std::cout << "Size w: " << config["gameWidth"] << std::endl << std::endl << "Game height: " << config["gameHeight"] << std::endl << std::endl;
 }
@@ -54,7 +50,6 @@ void Game::instance() {
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
         team2Robots[i].pos = {config["robotsPositions"]["team2"][i]["x"], config["robotsPositions"]["team2"][i]["y"]};
-        team2Robots[i].forward = -90;
     }
     #ifdef GRAPHICAL_USE
     for(int i = 0; i < 3; i++) {
@@ -73,40 +68,13 @@ void Game::run() {
         #ifdef GRAPHICAL_USE
         graph->render();
         #endif
-        //movement->collisionIndex = 0;
+        display();
         this->strategy->deduce();
-        //this->strategy2->deduce();
-        for (int i=0; i<6; i++) {
-            if (i<3) {objs[i] = team1Robots[i];}
-            else {objs[i] = team2Robots[i-3];}
-        }
-
-        for(int i = 0; i < 3; i++) {
-            movement->collision(team1Robots[i], *ball);
-            movement->collision(team2Robots[i], *ball);
-        }
-        if(ball->speed.dir != 0 || ball->speed.esq != 0) {
-            movement->moveBall(*ball, 1.f/60);
-        }
-        //display();
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }
 
 void Game::display() {
-/*     std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
-    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; */ 
-
-    for (int i=0; i<n; i++) {
-        if (colliders[i][0] != 0) {
-            if (colliders[i][1] != 0) {
-                std::cout << "Collision between objects " << colliders[i][0];
-                std::cout << " and " << colliders[i][1] << std::endl;
-            }
-            else {
-                    std::cout << "Collision between object " << colliders[i][0];
-                std::cout << " and ball" << std::endl;
-            }
-        }
-    }
+    std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
+    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; 
 }

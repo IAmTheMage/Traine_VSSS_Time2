@@ -91,6 +91,11 @@ void Movement::applySpeed(Object<Robot> &obj, float coeficient) {
     obj.speed.esq = speeds[0] * coeficient;
 }
 
+void Movement::applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2) {
+    obj.speed.dir = speeds[0] * coeficient1;
+    obj.speed.esq = speeds[0] * coeficient2;
+}
+
 bool Movement::fixAngle(Object<Robot> &obj, Point2f goal) {
     float th = Utils::getAngle(obj.pos, goal) * M_PI / 180;
     bool test = true;

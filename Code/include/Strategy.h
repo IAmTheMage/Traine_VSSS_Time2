@@ -21,7 +21,12 @@ class Strategy : public BaseStrategy {
         
         void goalkeeper() {
             const int quadrant = Utils::getQuadrant(ball->pos);
-            if(quadrant == 1 || quadrant == 4 || quadrant == 7) {
+            if(ballIsOnDefense() && Utils::getQuadrant(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos) != 0) {
+                std::cout << "when the shadows remains" << std::endl;
+                movement->chase(myTeamRobots[BASE_GOOALKEPER_ROBOT], centroidDef, 2.0f);
+                movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
+            }
+            /*if(quadrant == 1 || quadrant == 4 || quadrant == 7) {
                 float speeds[5] = {10.0f, 10.0f, 2000.0f, 0.3f, 978.0f};
                 movement->setValues(speeds);
                 Point2f target = {gooalkeperSelected->pos.x, ball->pos.y};
@@ -35,7 +40,7 @@ class Strategy : public BaseStrategy {
                     }
                     movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
                 }
-            }
+            }*/
         }
         void defender() {
 
@@ -62,6 +67,13 @@ class Strategy : public BaseStrategy {
             time = _time.count();
             goalkeeper();
             striker();
+        }
+
+        bool ballIsOnDefense() {
+            if(Utils::getDist(ball->pos, centroidDef) < Utils::getDist(ball->pos, centroidAtk)) {
+                return true;
+            }
+            return false;
         }
 
     private:

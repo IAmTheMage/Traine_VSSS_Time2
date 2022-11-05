@@ -129,45 +129,8 @@ bool Movement::wallCollision(Object<Robot> obj, float limits[], float offset) {
     else {return false;}
 }
 
-int objCollision(Object<Robot> objs[], Object<void*> ball, int col[][2]) {
-    float th;
-    Point2f dir, p1, p2;
-    int n = 0;
-
-    for (int i=0; i<6; i++) {
-        p1 = objs[i].pos;
-        for (int j=0; j<6; j++) {
-            if (i==j) {continue;}
-            p2 = objs[j].pos;
-
-            th = Utils::getAngle(p1, p2) * M_PI/180;
-            dir.x = cos(th); dir.y = sin(th);
-
-            if (Utils::getDist(p1, p2) <= 11.3137) {
-                objs[i].pos.x -= dir.x * 4.05;
-                objs[i].pos.y -= dir.y * 4.05;
-                objs[j].pos.x += dir.x * 4.05;
-                objs[j].pos.y += dir.y * 4.05;
-
-                col[n][0] = i; col[n][1] = j;
-                n++;
-            }
-        }
-
-        th = Utils::getAngle(p1, ball.pos) * M_PI/180;
-        dir.x = cos(th); dir.y = sin(th);
-
-        if (Utils::getDist(p1, ball.pos) <= 7.7919) {
-            objs[i].pos.x -= dir.x * 4.05;
-            objs[i].pos.y -= dir.y * 4.05;
-            ball.pos.x += dir.x * 2.185;
-            ball.pos.y += dir.y * 2.185;
-
-            col[n][0] = i; col[n][1] = 0;
-            n++;
-        }
-    }
-    return n;
+int objCollision(Object<Robot> objs[], Object<void*> &ball, int col[][2]) {
+    
 }
 
 void Movement::momentum(Object<Robot> &obj, Object<void*> ball) {
@@ -185,4 +148,47 @@ void Movement::momentum(Object<Robot> &obj, Object<void*> ball) {
 
     ball.speed.dir = dir.y * M / ball.mass;
     ball.speed.esq = dir.x * M / ball.mass;
+}
+
+void Movement::collision(Object<Robot> &obj, Object<void*> &ball) {
+    RectCollider robotCollider = {obj.pos.x, obj.pos.y, 8, 8};
+    RectCollider ballColider = {ball.pos.x, ball.pos.y};
+    if(checkCollision(robotCollider, ballColider)) {
+        std::cout << "Collision " << std::endl;
+        ball.speed.dir = obj.speed.dir;
+        ball.speed.esq = obj.speed.esq;
+        ball.forward = obj.forward;
+    }
+}
+
+bool Movement::checkCollision(RectCollider rect1, RectCollider rect2) {
+    if(rect1.x < rect2.x + rect2.width &&
+    rect1.x + rect1.width > rect2.x &&
+    rect1.y < rect2.y + rect2.height &&
+    rect1.y + rect1.height > rect2.y) return true;
+    return false;
+}
+
+void Movement::moveBall(Object<void*> &obj, float dt) {
+    float Vl, Vr;
+    Point2f dir;
+    dir.x = cos(obj.forward * M_PI/180);
+    dir.y = sin(obj.forward * M_PI/180);
+
+    if (obj.moving == false) {
+        if (obj.speed.dir > 0) {obj.speed.dir -= gravity*friction*dt;}
+        else {obj.speed.dir = 0;}
+        if (obj.speed.esq > 0) {obj.speed.esq -= gravity*friction*dt;}
+        else {obj.speed.esq = 0;}
+    }
+
+    Vl = obj.speed.dir + obj.speed.esq;
+    Vr = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
+
+    obj.pos.x += dir.x * Vl*dt;
+    obj.pos.y += dir.y * Vl*dt;
+    obj.forward += Vr*dt;
+
+    while (obj.forward > 180) {obj.forward -= 360;}
+    while (obj.forward < -180) {obj.forward += 360;}
 }

@@ -21,6 +21,13 @@ struct Color {
     int b;
 };
 
+struct RectCollider {
+    float x;
+    float y;
+    float width = 2.135 * 2;
+    float height = 2.135 * 2;
+};
+
 struct Robot
 {
     Color color;
@@ -29,7 +36,7 @@ struct Robot
 
 template<typename T>
 struct Object {
-    Vel speed;
+    Vel speed = {0, 0};
     Point2f pos;
     float mass, forward = 90;
     bool moving = true;

@@ -37,6 +37,7 @@ class Game {
 
         void printScore();
         StrategyManager* strategy;
+        StrategyManager* strategy2;
         void instance();
 
         json config;

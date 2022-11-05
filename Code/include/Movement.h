@@ -14,6 +14,7 @@ class Movement {
         ~Movement();
 
         void moveRobot(Object<Robot> &obj, float dt);
+        void moveBall(Object<void*> &ball, float dt);
         void kick(Object<Robot> &obj, Point2f ball, float angle, float distance);
         void applySpeed(Object<Robot> &obj, float coeficient);
         void getValues(float val[]);
@@ -25,8 +26,10 @@ class Movement {
         bool chase(Object<Robot> &obj, Point2f goal, float limit);
 
         bool wallCollision(Object<Robot> obj, float limits[], float offset);
-        int objCollision(Object<Robot> objs[], Object<void*> ball, int col[][2]);
+        int objCollision(Object<Robot> objs[], Object<void*> &ball, int col[][2]);
         void momentum(Object<Robot> &obj, Object<void*> ball);
+        bool checkCollision(RectCollider collider1, RectCollider collider2);
+        void collision(Object<Robot> &obj, Object<void*> &ball);
 };
 
 #endif

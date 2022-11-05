@@ -17,6 +17,7 @@ class Movement {
         void moveBall(Object<void*> &ball, float dt);
         void kick(Object<Robot> &obj, Point2f ball, float angle, float distance);
         void applySpeed(Object<Robot> &obj, float coeficient);
+        void applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2);
         void getValues(float val[]);
         void setValues(float val[]);
 

@@ -18,6 +18,7 @@ Game::Game(int argc, char** argv) {
 
     Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
     Strategy* _pass2 = new Strategy(ball, team2Robots, team1Robots);
+    //StrategyPass* mimura = new StrategyPass(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
     this->strategy2 = new StrategyManager();
     this->strategy->addStrategy("Passe",_pass);

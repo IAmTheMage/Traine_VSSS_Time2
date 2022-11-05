@@ -3,7 +3,13 @@
 #include <iostream>
 #include <cmath>
 
-Movement::Movement() {}
+Movement::Movement() {
+    speeds[0] = RUN_MOVEMENT;
+    speeds[1] = SPIN_MOVEMENT;
+    speeds[2] = KICK_COEFICIENT;
+    friction = FRICTION_COEFICIENT;
+    gravity = GRAVITY_COEFICIENT;
+}
 Movement::~Movement() {}
 
 void Movement::getValues(float val[]) {
@@ -196,4 +202,16 @@ void Movement::moveBall(Object<void*> &obj, float dt) {
 
     while (obj.forward > 180) {obj.forward -= 360;}
     while (obj.forward < -180) {obj.forward += 360;}
+}
+
+void Movement::spin(Object<Robot> &obj, float coeficient) {
+    if(coeficient > 0) coeficient = 1.f;
+    else if(coeficient < 0) coeficient = -1.f;
+    if(obj.forward > 180) {
+        obj.forward = 0;
+    }
+    else if(obj.forward < -180) {
+        obj.forward = 0;
+    }
+    obj.forward += SPIN_COEFICIENT * coeficient;
 }

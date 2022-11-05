@@ -25,7 +25,7 @@ class StrategyPass : public BaseStrategy {
             robotC = &myTeamRobots[C];
         }
 
-/*         void striker() {
+        void striker() {
             int places[3];
             Point2f mean = {0, 0};
             float angle;
@@ -80,42 +80,12 @@ class StrategyPass : public BaseStrategy {
         }
 
         void goalkeeper() {
-            int places[2];
-            float angle;
-
-            places[0] = Utils::getQuadrant(ball->pos);
-            places[1] = Utils::getQuadrant(robotA->pos);
-
-            int i;
-            for (int i=0; i<3; i++) {
-                if (Utils::getQuadrant(anotherTeamRobots[i].pos)) {break;}
-            }
-
-            if (places[1] == 3) {
-                if (places[0] != 5) {
-                    movement->chase(myTeamRobots[C], {75, 65}, 1);
-                }
-                else {
-                    angle = Utils::getAngle(robotC->pos, anotherTeamRobots[i].pos);
-                    movement->kick(myTeamRobots[A], ball->pos, angle-5, 100);
-                }
-            }
-        } */
+            std::cout << "dfiojadjioasjidoajio" << std::endl << std::endl;
+        } 
 
         
 
         void decisions() {
-            if(index == 0) start_time = std::chrono::system_clock::now();
-            index++;
-            current_time = std::chrono::system_clock::now();
-            std::chrono::duration<double> _time = current_time - start_time;
-            time = _time.count();
-
-            float values[5] = {150, 320, 2000, 0.3, 978};
-            movement->setValues(values);
-
-            striker();
-            defender();
             goalkeeper();
         }
 

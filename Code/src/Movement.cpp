@@ -129,8 +129,66 @@ bool Movement::wallCollision(Object<Robot> obj, float limits[], float offset) {
     else {return false;}
 }
 
-bool Movement::objCollision(Object<Robot> obj1, Point2f obj2, float offset) {
-    float d = Utils::getDist(obj1.pos, obj2);
-    if (d < offset) {obj1.moving = false; return true;}
-    else {return false;}
+int objCollision(Object<Robot> objs[], Object<void*> &ball, int col[][2]) {
+    
+}
+
+void Movement::momentum(Object<Robot> &obj, Object<void*> ball) {
+    float Vo, Vb, M, th;
+    Point2f dir;
+
+    Vb = pow(ball.speed.dir, 2) + pow(ball.speed.esq, 2);
+    Vb = sqrt(Vb);
+
+    Vo = obj.speed.dir + obj.speed.esq;
+    M = obj.mass * Vo + ball.mass * Vb;
+
+    th = Utils::getAngle(obj.pos, ball.pos) * M_PI/180;
+    dir.x = cos(th); dir.y = sin(th);
+
+    ball.speed.dir = dir.y * M / ball.mass;
+    ball.speed.esq = dir.x * M / ball.mass;
+}
+
+void Movement::collision(Object<Robot> &obj, Object<void*> &ball) {
+    RectCollider robotCollider = {obj.pos.x, obj.pos.y, 8, 8};
+    RectCollider ballColider = {ball.pos.x, ball.pos.y};
+    if(checkCollision(robotCollider, ballColider)) {
+        std::cout << "Collision " << std::endl;
+        ball.speed.dir = obj.speed.dir;
+        ball.speed.esq = obj.speed.esq;
+        ball.forward = obj.forward;
+    }
+}
+
+bool Movement::checkCollision(RectCollider rect1, RectCollider rect2) {
+    if(rect1.x < rect2.x + rect2.width &&
+    rect1.x + rect1.width > rect2.x &&
+    rect1.y < rect2.y + rect2.height &&
+    rect1.y + rect1.height > rect2.y) return true;
+    return false;
+}
+
+void Movement::moveBall(Object<void*> &obj, float dt) {
+    float Vl, Vr;
+    Point2f dir;
+    dir.x = cos(obj.forward * M_PI/180);
+    dir.y = sin(obj.forward * M_PI/180);
+
+    if (obj.moving == false) {
+        if (obj.speed.dir > 0) {obj.speed.dir -= gravity*friction*dt;}
+        else {obj.speed.dir = 0;}
+        if (obj.speed.esq > 0) {obj.speed.esq -= gravity*friction*dt;}
+        else {obj.speed.esq = 0;}
+    }
+
+    Vl = obj.speed.dir + obj.speed.esq;
+    Vr = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
+
+    obj.pos.x += dir.x * Vl*dt;
+    obj.pos.y += dir.y * Vl*dt;
+    obj.forward += Vr*dt;
+
+    while (obj.forward > 180) {obj.forward -= 360;}
+    while (obj.forward < -180) {obj.forward += 360;}
 }

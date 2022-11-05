@@ -37,6 +37,10 @@ class Graphics {
                 if(event.type == sf::Event::Closed) window->close();
             }
             drawMap();
+            RectCollider ballColider = {ball->pos.x, ball->pos.y};
+            sf::RectangleShape ballColliderRepresentation(sf::Vector2f(RENDER_COEFICIENT * ballColider.width, RENDER_COEFICIENT * ballColider.height));
+            ballColliderRepresentation.setPosition(sf::Vector2f(RENDER_COEFICIENT * ballColider.x, RENDER_COEFICIENT * ballColider.y));
+            ballColliderRepresentation.setFillColor(sf::Color::Red);
             sf::CircleShape ballRepresentation(2.135 * RENDER_COEFICIENT);
             ballRepresentation.setPosition(sf::Vector2f(ball->pos.x * RENDER_COEFICIENT, ball->pos.y * RENDER_COEFICIENT));
             ballRepresentation.setFillColor(sf::Color(255,127,80));
@@ -46,11 +50,12 @@ class Graphics {
                 shape.setFillColor(sf::Color(_robot->includedData.color.r, 
                 _robot->includedData.color.g, 
                 _robot->includedData.color.b));
-                shape.setOrigin(sf::Vector2f(8, 8));
+                shape.setOrigin(sf::Vector2f(4.f * RENDER_COEFICIENT, 4.f * RENDER_COEFICIENT));
                 shape.setRotation(_robot->forward);
                 window->draw(shape);
             }
             window->draw(ballRepresentation);
+            window->draw(ballColliderRepresentation);
             window->display();
         }
         void trackRobot(Object<Robot>* robot) {

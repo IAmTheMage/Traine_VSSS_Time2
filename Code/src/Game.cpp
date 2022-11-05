@@ -69,6 +69,7 @@ void Game::run() {
     pauseCondition = config["pauseCondition"];
     std::cout << "Pause condition: " << pauseCondition << std::endl << std::endl;
     bool isRunning = score1 < pauseCondition && score2 < pauseCondition;
+    int ver_gol;
     while(isRunning) {
         #ifdef GRAPHICAL_USE
         graph->render();
@@ -88,14 +89,19 @@ void Game::run() {
         if(ball->speed.dir != 0 || ball->speed.esq != 0) {
             movement->moveBall(*ball, 1.f/60);
         }
-        //display();
+
+        display();
+        ver_gol = Utils::getQuadrant(ball->pos);    // 0 - dentro do gol1, 10 - dentro do gol2
+        if(ver_gol == 0) {score2++;}
+        else if(ver_gol == 10) {score1++;}
+
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }
 
 void Game::display() {
-/*     std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
-    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; */ 
+    std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
+    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; 
 
     for (int i=0; i<n; i++) {
         if (colliders[i][0] != 0) {

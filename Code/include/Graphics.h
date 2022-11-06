@@ -40,7 +40,8 @@ class Graphics {
             RectCollider ballColider = {ball->pos.x, ball->pos.y};
             sf::RectangleShape ballColliderRepresentation(sf::Vector2f(RENDER_COEFICIENT * ballColider.width, RENDER_COEFICIENT * ballColider.height));
             ballColliderRepresentation.setPosition(sf::Vector2f(RENDER_COEFICIENT * ballColider.x, RENDER_COEFICIENT * ballColider.y));
-            ballColliderRepresentation.setFillColor(sf::Color::Red);
+            ballColliderRepresentation.setFillColor(sf::Color(255,255,255,128));
+            ballColliderRepresentation.setOutlineColor(sf::Color::Red);
             sf::CircleShape ballRepresentation(2.135 * RENDER_COEFICIENT);
             ballRepresentation.setPosition(sf::Vector2f(ball->pos.x * RENDER_COEFICIENT, ball->pos.y * RENDER_COEFICIENT));
             ballRepresentation.setFillColor(sf::Color(255,127,80));

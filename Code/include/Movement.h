@@ -21,7 +21,9 @@ class Movement {
         void moveBall(Object<void*> &ball, float dt);
         void kick(Object<Robot> obj, Object<void*> &ball, Point2f goal);
         void applySpeed(Object<Robot> &obj, float coeficient);
-
+        void applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2);
+        void getValues(float val[]);
+        void setValues(float val[]);
         bool lookAt(Object<Robot> &obj, float angle, float limit);
         bool run(Object<Robot> &obj, Point2f goal, float offset);
         bool fixAngle(Object<Robot> &obj, Point2f goal);

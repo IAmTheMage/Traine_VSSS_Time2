@@ -29,8 +29,8 @@ void Movement::moveRobot(Object<Robot> &obj, float dt) {
     int sgn1, sgn2;
 
     if (obj.moving) {
-        obj.vel.x = obj.includedData.speed.dir + obj.includedData.speed.esq;
-        obj.vel.y = (obj.includedData.speed.dir - obj.includedData.speed.esq) * 0.45/M_PI;
+        obj.vel.x = obj.speed.dir + obj.speed.esq;
+        obj.vel.y = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
     }
     else {
         sgn1 = abs(obj.vel.x) / obj.vel.x;
@@ -79,8 +79,8 @@ bool Movement::lookAt(Object<Robot> &obj, float angle, float limit) {
     Point2f range = {th2*(1-limit), th2*(1+limit)};
 
     if (th1 < range.x || th1 > range.y) {
-        if (angle > 0) {obj.includedData.speed = {-speeds[1], speeds[1]};}
-        else {obj.includedData.speed = {speeds[1], -speeds[1]};}
+        if (angle > 0) {obj.speed = {-speeds[1], speeds[1]};}
+        else {obj.speed = {speeds[1], -speeds[1]};}
 
         return false;
     }
@@ -91,13 +91,13 @@ bool Movement::run(Object<Robot> &obj, Point2f goal, float offset) {
     float d = Utils::getDist(obj.pos, goal);
     float limit = pow(speeds[0], 2) / (2*gravity * friction);
 
-    if (d > limit + offset) {obj.includedData.speed = {speeds[0], speeds[0]}; return false;}
+    if (d > limit + offset) {obj.speed = {speeds[0], speeds[0]}; return false;}
     else {obj.moving = false; return true;}
 }
 
 void Movement::applySpeed(Object<Robot> &obj, float coeficient) {
-    obj.includedData.speed.dir = speeds[0] * coeficient;
-    obj.includedData.speed.esq = speeds[0] * coeficient;
+    obj.speed.dir = speeds[0] * coeficient;
+    obj.speed.esq = speeds[0] * coeficient;
 }
 
 bool Movement::fixAngle(Object<Robot> &obj, Point2f goal) {
@@ -124,7 +124,7 @@ bool Movement::chase(Object<Robot> &obj, Point2f goal, float limit) {
     if (th < 0) {Ve = V; Vd = V * (1 - 10*S);}
     if (th <= -M_PI/2) {Ve = -V; Vd = -V * (1 - 10*S);}
 
-    if (d > limit) {obj.includedData.speed = {Ve, Vd}; return false;}
+    if (d > limit) {obj.speed = {Ve, Vd}; return false;}
     else {obj.moving = false; return true;}
 
     return false;

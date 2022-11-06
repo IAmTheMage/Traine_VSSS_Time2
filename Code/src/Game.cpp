@@ -39,7 +39,7 @@ void Game::instance() {
     this->ball = std::make_shared<Object<void*>>();
 
     ball->pos = {config["ball"]["x"], config["ball"]["y"]};
-    ball->vel = {30.0f, 0.0f};
+    ball->vel = {0.0f, 0.0f};
     ball->forward = config["ball"]["f"];
     ball->mass = config["ball"]["m"];
     
@@ -83,7 +83,7 @@ void Game::run() {
         graph->render();
         #endif
         // movement->collisionIndex = 0;
-        // this->strategy->deduce();
+        this->strategy->deduce();
         // this->strategy2->deduce();
 
         float sizes[2][2];

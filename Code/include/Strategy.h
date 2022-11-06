@@ -72,7 +72,7 @@ class Strategy : public BaseStrategy {
                     movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
                 }
                 else if(Utils::getDist(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos, ball->pos) <= 1.f) {
-                    movement->kick(myTeamRobots[BASE_GOOALKEPER_ROBOT], *ball, 10.f, 35.f);
+                    //movement->kick(myTeamRobots[BASE_GOOALKEPER_ROBOT], *ball, 10.f, 35.f);
                     kicked = true;
                 }
                 std::cout << "Index: " << dists[0].index << std::endl;
@@ -82,7 +82,7 @@ class Strategy : public BaseStrategy {
                 movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
             }
             else if(quadrant == -1 && Utils::getDist(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos, ball->pos) <= 1.f) {
-                movement->kick(myTeamRobots[BASE_GOOALKEPER_ROBOT], *ball, 10.f, 35.f);
+                //movement->kick(myTeamRobots[BASE_GOOALKEPER_ROBOT], *ball, 10.f, 35.f);
             }
             std::cout << "Position x: " << myTeamRobots[BASE_GOOALKEPER_ROBOT].pos.x << std::endl << std::endl;
         }

@@ -25,7 +25,7 @@ class StrategyPass : public BaseStrategy {
             robotC = &myTeamRobots[C];
         }
 
-        void striker() {
+        /*void striker() {
             int places[3];
             Point2f mean = {0, 0};
             float angle;
@@ -87,7 +87,7 @@ class StrategyPass : public BaseStrategy {
 
         void decisions() {
             goalkeeper();
-        }
+        }*/
 
     private:
         Object<Robot> *robotA, *robotB, *robotC;

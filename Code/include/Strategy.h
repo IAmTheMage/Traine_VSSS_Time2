@@ -27,7 +27,7 @@ class Strategy : public BaseStrategy {
                 float angle = Utils::getAngle(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos, centroidDef);
                 float relative_angle = abs(angle - myTeamRobots[BASE_GOOALKEPER_ROBOT].forward);
                 if(relative_angle < 70) {
-                    movement->chase(myTeamRobots[BASE_GOOALKEPER_ROBOT], centroidDef, 2.0f);
+                    movement->chaseS(myTeamRobots[BASE_GOOALKEPER_ROBOT], centroidDef, 2.0f, 1.0f);
                 }
                 else {
                     movement->spin(myTeamRobots[BASE_GOOALKEPER_ROBOT], 1);
@@ -52,12 +52,19 @@ class Strategy : public BaseStrategy {
                 (gooalkeperSelected->pos.y <= 92 || ball->pos.y < gooalkeperSelected->pos.y )) {
                     if(ball->pos.y > gooalkeperSelected->pos.y) {
                         movement->applySpeed(myTeamRobots[BASE_GOOALKEPER_ROBOT], -1);
-                    }
+                    } 
                     else {
                         movement->applySpeed(myTeamRobots[BASE_GOOALKEPER_ROBOT], 1);
                     }
                     movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
                 }
+            }
+            else if(quadrant == -1 && Utils::getDist(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos, ball->pos) > 1.f) {
+                movement->chaseS(myTeamRobots[BASE_GOOALKEPER_ROBOT], ball->pos, 1.0f, 1.0f);
+                movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
+            }
+            else if(quadrant == -1 && Utils::getDist(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos, ball->pos) <= 1.f) {
+                movement->kick(myTeamRobots[BASE_GOOALKEPER_ROBOT], *ball, 10.f, 35.f);
             }
             std::cout << "Position x: " << myTeamRobots[BASE_GOOALKEPER_ROBOT].pos.x << std::endl << std::endl;
         }

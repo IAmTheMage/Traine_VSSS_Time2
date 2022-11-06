@@ -52,22 +52,16 @@ void Movement::moveRobot(Object<Robot> &obj, float dt) {
     while (obj.forward < -180) {obj.forward += 360;}
 }
 
-void Movement::kick(Object<Robot> &obj, Point2f ball, float angle, float distance) {
-    Point2f dir, goal;
-    dir.x = cos(angle * M_PI/180);
-    dir.y = sin(angle * M_PI/180);
-
-    goal.x = ball.x - dir.x * 8;
-    goal.y = ball.y - dir.y * 8;
-
-    bool test = false;
-    float th;
-    if (test == false) {test = chase(obj, goal, 1);}
-    else {
-        th = Utils::getAngle(obj.pos, ball);
-        if (lookAt(obj, th, 0.05)) {
-            run(obj, ball, 1);
-        }
+bool Movement::kick(Object<Robot> &obj, Object<void*> &ball, float force, float angle) {
+    const int distance = Utils::getDist(obj.pos, ball.pos);
+    force = abs(force);
+    if(force > 20.f) force = 20.f;
+    if(angle > 35) angle = 35;
+    if(angle < -35) angle = -35;
+    if(distance < 0.5f) {
+        ball.speed.dir += force;
+        ball.speed.esq += force;
+        ball.forward = obj.forward + angle;
     }
 }
 
@@ -130,6 +124,14 @@ bool Movement::chase(Object<Robot> &obj, Point2f goal, float limit) {
     else {obj.speed = {0, 0}; return true;}
 
     return false;
+}
+
+void Movement::chaseS(Object<Robot> &obj, Point2f goal, float limit, float diff) {
+    float th = (Utils::getAngle(obj.pos, goal) - obj.forward);
+    obj.speed.esq = RUN_MOVEMENT - (th * KP);
+    obj.speed.dir = RUN_MOVEMENT + (th * KP);
+    std::cout << "OBJETO ESQ: " << obj.speed.esq << std::endl;
+    std::cout << "OBJETO DIR: " << obj.speed.dir << std::endl;
 }
 
 bool Movement::wallCollision(Object<Robot> obj, float limits[], float offset) {

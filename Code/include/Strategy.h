@@ -33,7 +33,12 @@ class Strategy : public BaseStrategy {
                 std::cout << "when the shadows remains" << std::endl;
                 float angle = Utils::getAngle(myTeamRobots[BASE_GOOALKEPER_ROBOT].pos, centroidDef);
                 float relative_angle = abs(angle - myTeamRobots[BASE_GOOALKEPER_ROBOT].forward);
-                movement->chaseS(myTeamRobots[BASE_GOOALKEPER_ROBOT], centroidDef, 2.0f, -1.0f);
+                if(relative_angle < 80) {
+                    movement->chaseS(myTeamRobots[BASE_GOOALKEPER_ROBOT], centroidDef, 2.0f, 1.0f);
+                }
+                else {
+                    movement->spin(myTeamRobots[BASE_GOOALKEPER_ROBOT], 1);
+                }
                 movement->moveRobot(myTeamRobots[BASE_GOOALKEPER_ROBOT], (1.f/60));
             }
             else if(ballIsOnDefense() && myTeamRobots[BASE_GOOALKEPER_ROBOT].pos.x < 16.f && myTeamRobots[BASE_GOOALKEPER_ROBOT].pos.x > 11.f && !spin_on_base) {

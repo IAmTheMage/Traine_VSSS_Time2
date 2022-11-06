@@ -100,9 +100,6 @@ void Game::run() {
         if(ball->speed.dir != 0 || ball->speed.esq != 0) {
             movement->moveBall(*ball, 1.f/60);
         }
-        ball->speed.dir = -10.f; 
-        ball->speed.esq = -10.f;
-        ball->forward = 180.f;
         display();
         ver_gol = Utils::getQuadrant(ball->pos);    // 0 - dentro do gol1, 10 - dentro do gol2
         if(ver_gol == 0) {

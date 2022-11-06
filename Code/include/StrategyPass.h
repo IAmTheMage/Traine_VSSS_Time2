@@ -105,7 +105,7 @@ class StrategyPass : public BaseStrategy {
         void striker() {
             float sizes[2][2] = {{4, 4,}, {2.135, 2.135}};
 
-            movement->run(myTeamRobots[A], {120, 30}, 0);
+            movement->run(myTeamRobots[A], {120, 65}, 0);
             movement->moveRobot(myTeamRobots[A], 1/60.);
         }
 

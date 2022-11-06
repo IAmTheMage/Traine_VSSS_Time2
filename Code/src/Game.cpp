@@ -37,9 +37,11 @@ void Game::instance() {
     std::ifstream ifs(CONFIG_PATH);
     config = json::parse(ifs);
     this->ball = std::make_shared<Object<void*>>();
+
     ball->pos = {config["ball"]["x"], config["ball"]["y"]};
-    ball->vel = {20.0f, 0.0f};
-    ball->forward = 30;
+    ball->vel = {30.0f, 0.0f};
+    ball->forward = config["ball"]["f"];
+    ball->mass = config["ball"]["m"];
     
     #ifdef GRAPHICAL_USE
     Color team1Color = {config["colors"]["team1"]["r"], config["colors"]["team1"]["g"], config["colors"]["team1"]["b"]};
@@ -54,12 +56,13 @@ void Game::instance() {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
         team2Robots[i].pos = {config["robotsPositions"]["team2"][i]["x"], config["robotsPositions"]["team2"][i]["y"]};
         
-        // team1Robots[i].forward = config["robotsPositions"]["team1"][i]["f"];
-        // team2Robots[i].forward = config["robotsPositions"]["team2"][i]["f"];
-        team1Robots[i].forward = 0;
-        team2Robots[i].forward = 0;
+        team1Robots[i].forward = config["robotsPositions"]["team1"][i]["f"];
+        team2Robots[i].forward = config["robotsPositions"]["team2"][i]["f"];
+
+        team1Robots[i].mass = config["robotsPositions"]["team1"][i]["m"];
+        team2Robots[i].mass = config["robotsPositions"]["team1"][i]["m"];
     }
-    for (int i=0; i<4; i++) {
+    for (int i=0; i<6; i++) {
         walls[i].pos = {config["walls"][i]["x"], config["walls"][i]["y"]};
     }
     #ifdef GRAPHICAL_USE
@@ -85,16 +88,27 @@ void Game::run() {
 
         float sizes[2][2];
         sizes[1][0] = 2.135; sizes[1][1] = 2.135;
-        if (ball->vel.x != 0 || ball->vel.y != 0) {
-            movement->moveBall(*ball, 1/60.);
+        movement->moveBall(*ball, 1/60.);
 
-            sizes[0][0] = 150; sizes[0][1] = 1;
-            Collision::reflection(walls[0], *ball, sizes, 'H');
-            Collision::reflection(walls[1], *ball, sizes, 'H');
+        sizes[0][0] = 150; sizes[0][1] = 1;
+        Collision::reflection(walls[0], *ball, sizes, 'H');
+        Collision::reflection(walls[1], *ball, sizes, 'H');
 
-            sizes[0][0] = 1; sizes[0][1] = 130;
-            Collision::reflection(walls[2], *ball, sizes, 'V');
-            Collision::reflection(walls[3], *ball, sizes, 'V');
+        sizes[0][0] = 1; sizes[0][1] = 25;
+        for (int i=2; i<6; i++) {
+            Collision::reflection(walls[i], *ball, sizes, 'V');
+        }
+
+        sizes[0][0] = 4; sizes[0][1] = 4;
+        for (int j=0; j<3; j++) {
+            Collision::ballCollision(team1Robots[j], *ball, sizes);
+            Collision::ballCollision(team2Robots[j], *ball, sizes);
+        }
+
+        float limits[4] = {0, 150, 0, 130};
+        for (int k=0; k<3; k++) {
+            Collision::wallCollision(team1Robots[k], limits, 4);
+            Collision::wallCollision(team2Robots[k], limits, 4);
         }
 
         display();

@@ -34,7 +34,7 @@ class Game {
 
         Object<Robot> team1Robots[3];
         Object<Robot> team2Robots[3];
-        Object<void*> walls[4];
+        Object<void*> walls[6];
 
         void printScore();
         StrategyManager* strategy;

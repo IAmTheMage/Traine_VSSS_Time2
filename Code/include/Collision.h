@@ -12,16 +12,6 @@ class Collision {
                 return false;
         }
 
-/*         static bool checkCollision(RectCollider rect1, RectCollider rect2) {
-            if((rect1.x - rect1.width < rect2.x + rect2.width) &&
-            (rect1.x + rect1.width > rect2.x - rect2.width) &&
-            (rect1.y - rect1.height < rect2.y + rect2.height) &&
-            (rect1.y + rect1.height > rect2.y - rect2.height)) {
-                return true;
-            }
-            return false;
-        } */
-
         static void wallCollision(Object<Robot> &obj, float limits[4], float offset) {
             if (obj.pos.x < limits[0] + offset ||
                 obj.pos.x > limits[1] - offset ||
@@ -50,8 +40,8 @@ class Collision {
             }
         }
 
-        static void ballCollision(Object<Robot> &obj, Object<void*> &ball, float sizes[2][2]) {
-            float M = obj.mass*obj.vel.x + ball.mass*ball.vel.x;
+        static void ballCollision(Object<Robot> obj, Object<void*> &ball, float sizes[2][2]) {
+            float M = obj.mass*obj.vel.x/5. + ball.mass*ball.vel.x;
 
             RectCollider collider1 = {obj.pos.x, obj.pos.y, sizes[0][0], sizes[0][1]};
             RectCollider collider2 = {ball.pos.x, ball.pos.y, sizes[1][0], sizes[1][1]};
@@ -67,7 +57,6 @@ class Collision {
             if (checkCollision(collider1, collider2)) {
                 if (type == 'H') {ball.forward = -ball.forward;}
                 if (type == 'V') {
-                    std::cout << "Ok" << std::endl;
                     if (ball.forward > 0) {ball.forward = 180 - ball.forward;}
                     else {ball.forward = -180 - ball.forward;}
                 }

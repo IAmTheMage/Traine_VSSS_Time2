@@ -7,6 +7,7 @@
 #include "DataManager.hpp"
 #include "fstream"
 #include "Graphics.h"
+#include "StrategyPass.h"
 
 using json = nlohmann::json;
 
@@ -33,7 +34,7 @@ class Game {
 
         Object<Robot> team1Robots[3];
         Object<Robot> team2Robots[3];
-        Object<Robot> objs[6];
+        Object<void*> walls[4];
 
         void printScore();
         StrategyManager* strategy;

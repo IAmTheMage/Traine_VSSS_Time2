@@ -4,9 +4,9 @@
 #include <iostream>
 using namespace std;
 
-#define A 0
+#define A 2
 #define B 1
-#define C 2
+#define C 0
 
 #ifndef STRATEGYPASS_H
 #define STRATEGYPASS_H
@@ -102,7 +102,12 @@ class StrategyPass : public BaseStrategy {
             }
         } */
 
-        
+        void striker() {
+            float sizes[2][2] = {{4, 4,}, {2.135, 2.135}};
+
+            movement->run(myTeamRobots[A], {120, 30}, 0);
+            movement->moveRobot(myTeamRobots[A], 1/60.);
+        }
 
         void decisions() {
             if(index == 0) start_time = std::chrono::system_clock::now();
@@ -111,7 +116,7 @@ class StrategyPass : public BaseStrategy {
             std::chrono::duration<double> _time = current_time - start_time;
             time = _time.count();
 
-            float values[5] = {150, 320, 2000, 0.3, 978};
+            float values[5] = {20, 320, 2000, 0.3, 978};
             movement->setValues(values);
 
             striker();

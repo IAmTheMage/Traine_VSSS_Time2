@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "Collision.h"
 #include <iostream>
 
 #ifndef MOVEMENT_H
@@ -13,24 +14,20 @@ class Movement {
         Movement();
         ~Movement();
 
+        void getValues(float val[]);
+        void setValues(float val[]);
+
         void moveRobot(Object<Robot> &obj, float dt);
         void moveBall(Object<void*> &ball, float dt);
-        void kick(Object<Robot> &obj, Point2f ball, float angle, float distance);
+        void kick(Object<Robot> obj, Object<void*> &ball, Point2f goal);
         void applySpeed(Object<Robot> &obj, float coeficient);
         void applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2);
         void getValues(float val[]);
         void setValues(float val[]);
-
         bool lookAt(Object<Robot> &obj, float angle, float limit);
         bool run(Object<Robot> &obj, Point2f goal, float offset);
         bool fixAngle(Object<Robot> &obj, Point2f goal);
         bool chase(Object<Robot> &obj, Point2f goal, float limit);
-
-        bool wallCollision(Object<Robot> obj, float limits[], float offset);
-        int objCollision(Object<Robot> objs[], Object<void*> &ball, int col[][2]);
-        void momentum(Object<Robot> &obj, Object<void*> ball);
-        bool checkCollision(RectCollider collider1, RectCollider collider2);
-        void collision(Object<Robot> &obj, Object<void*> &ball);
 };
 
 #endif

@@ -40,8 +40,6 @@ void Game::instance() {
     std::ifstream ifs(CONFIG_PATH);
     config = json::parse(ifs);
     this->ball = std::make_shared<Object<void*>>();
-    ball->pos = {config["ball"]["x"], config["ball"]["y"]};
-    ball->speed = {0.0f, 0.0f};
     
     #ifdef GRAPHICAL_USE
     Color team1Color = {config["colors"]["team1"]["r"], config["colors"]["team1"]["g"], config["colors"]["team1"]["b"]};
@@ -52,6 +50,12 @@ void Game::instance() {
     }
     graph = new Graphics(ball);
     #endif
+    reset();
+}
+
+void Game::reset() {
+    ball->pos = {config["ball"]["x"], config["ball"]["y"]};
+    ball->speed = {0.0f, 0.0f};
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
         team2Robots[i].pos = {config["robotsPositions"]["team2"][i]["x"], config["robotsPositions"]["team2"][i]["y"]};
@@ -71,17 +75,18 @@ void Game::run() {
     std::cout << "Pause condition: " << pauseCondition << std::endl << std::endl;
     bool isRunning = score1 < pauseCondition && score2 < pauseCondition;
     int ver_gol;
+    float virtual_timer = 0;
     while(isRunning) {
+        index++;
         #ifdef GRAPHICAL_USE
+        if(index % 60 == 0) 
+        graph->setTimer(1);
+        graph->setScores(score1, score2);
         graph->render();
         #endif
         //movement->collisionIndex = 0;
         this->strategy->deduce();
         //this->strategy2->deduce();
-        for (int i=0; i<6; i++) {
-            if (i<3) {objs[i] = team1Robots[i];}
-            else {objs[i] = team2Robots[i-3];}
-        }
 
         for(int i = 0; i < 3; i++) {
             movement->collision(team1Robots[i], *ball);
@@ -90,11 +95,19 @@ void Game::run() {
         if(ball->speed.dir != 0 || ball->speed.esq != 0) {
             movement->moveBall(*ball, 1.f/60);
         }
-
+        ball->speed.dir = -10.f; 
+        ball->speed.esq = -10.f;
+        ball->forward = 180.f;
         display();
         ver_gol = Utils::getQuadrant(ball->pos);    // 0 - dentro do gol1, 10 - dentro do gol2
-        if(ver_gol == 0) {score2++;}
-        else if(ver_gol == 10) {score1++;}
+        if(ver_gol == 0) {
+            score2++;
+            reset();
+        }
+        else if(ver_gol == 10) {
+            score1++;
+            reset();
+        }
 
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }

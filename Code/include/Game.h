@@ -7,6 +7,7 @@
 #include "DataManager.hpp"
 #include "fstream"
 #include "Graphics.h"
+#include "chrono"
 
 using json = nlohmann::json;
 
@@ -28,6 +29,8 @@ class Game {
         int colliders[40][2];
         int n;
 
+        void reset();
+
         std::shared_ptr<Object<void*>> ball;
         Movement* movement;
 
@@ -43,6 +46,10 @@ class Game {
         json config;
         #ifdef GRAPHICAL_USE
         Graphics* graph;
+        std::chrono::system_clock::time_point start_time;
+        std::chrono::system_clock::time_point current_time;
+        double time = 0.f;
+        short index = 0;
         #endif
 };
 

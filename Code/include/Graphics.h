@@ -11,6 +11,9 @@
 #include "memory"
 #include "vector"
 #include "Structdorobo.h"
+#include "string"
+#include "chrono"
+#include "math.h"
 
 #ifndef GRAPHICS_INCLUDE_H
 #define GRAPHICS_INCLUDE_H
@@ -56,6 +59,7 @@ class Graphics {
             }
             window->draw(ballRepresentation);
             window->draw(ballColliderRepresentation);
+            drawScores();
             window->display();
         }
         void trackRobot(Object<Robot>* robot) {
@@ -87,12 +91,61 @@ class Graphics {
             window->draw(area1);
             window->draw(area2);
         }
+
+        void drawScores() {
+            std::cout << "Draw text" << std::endl;
+            sf::Font font;
+            if(!font.loadFromFile("./arial.ttf")) {
+                std::cout << "Erro em carregar a fonte" << std::endl;
+                exit(0);
+            }
+            else {
+                sf::Text scoresRepresentation;
+                std::string chars;
+                chars.append(std::to_string(score1));
+                chars += ':';
+                chars.append(std::to_string(score2));
+                scoresRepresentation.setFont(font);
+                scoresRepresentation.setString(chars);
+                scoresRepresentation.setPosition(sf::Vector2f(71.86 * RENDER_COEFICIENT, 15 * RENDER_COEFICIENT));
+                scoresRepresentation.setCharacterSize(36);
+                scoresRepresentation.setFillColor(sf::Color::White);
+                window->draw(scoresRepresentation);
+                sf::Text timer;
+                std::string timer_string;
+                timer_string.append(std::to_string(time_intpart));
+                timer_string.append(":");
+                timer_string.append(std::to_string(time_flt_part));
+                timer.setFont(font);
+                timer.setString(timer_string);
+                timer.setPosition(sf::Vector2f(71.86 * RENDER_COEFICIENT, 10 * RENDER_COEFICIENT));
+                timer.setCharacterSize(36);
+                timer.setFillColor(sf::Color::White);
+                //window->draw(timer);
+            }
+        }
+
+        void setScores(int score1, int score2) {
+            this->score1 = score1;
+            this->score2 = score2;
+        }
+
+        void setTimer(float timer) {
+            time -= timer;
+            float temp_time = time / 60;
+            time_flt_part = modf(temp_time, &time_intpart);
+            time_flt_part *= 60;
+        }
     private:
         std::unique_ptr<sf::RenderWindow> window;
         std::vector<Object<Robot>*> robots;
         std::shared_ptr<Object<void*>> ball;
         Color _team1Color;
         Color _team2Color;
+        int score1, score2;
+        double time = 300.f;
+        double time_intpart = 0, time_flt_part = 0;
+        int index = 0;
 };
 
 #endif

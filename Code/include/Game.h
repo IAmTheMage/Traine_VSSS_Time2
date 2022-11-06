@@ -46,8 +46,6 @@ class Game {
         json config;
         #ifdef GRAPHICAL_USE
         Graphics* graph;
-        std::chrono::system_clock::time_point start_time;
-        std::chrono::system_clock::time_point current_time;
         double time = 0.f;
         short index = 0;
         #endif

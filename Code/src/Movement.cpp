@@ -52,18 +52,13 @@ void Movement::moveRobot(Object<Robot> &obj, float dt) {
     while (obj.forward < -180) {obj.forward += 360;}
 }
 
-bool Movement::kick(Object<Robot> &obj, Object<void*> &ball, float force, float angle) {
-    const int distance = Utils::getDist(obj.pos, ball.pos);
-    force = abs(force);
-    if(force > 20.f) force = 20.f;
-    if(angle > 35) angle = 35;
-    if(angle < -35) angle = -35;
-    float real_angle = obj.forward + angle;
-    if(distance < 0.5f) {
-        ball.speed.dir += force;
-        ball.speed.esq += force;
-        ball.forward = real_angle;
-    }
+void Movement::kick(Object<Robot> obj, Object<void*> &ball, Point2f goal) {
+    float d = Utils::getDist(ball.pos, goal);
+    float th = Utils::getAngle(ball.pos, goal);
+    float V = sqrt(2*gravity*friction * d);
+
+    ball.vel.x = V;
+    ball.forward = th;
 }
 
 bool Movement::lookAt(Object<Robot> &obj, float angle, float limit) {

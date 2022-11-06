@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include <iostream>
+#include "Collision.h"
 
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
@@ -24,7 +25,7 @@ class Movement {
 
         void moveRobot(Object<Robot> &obj, float dt);
         void moveBall(Object<void*> &ball, float dt);
-        bool kick(Object<Robot> &obj, Object<void*> &ball, float force, float angle);
+        void kick(Object<Robot> obj, Object<void*> &ball, Point2f goal);
         void applySpeed(Object<Robot> &obj, float coeficient);
         void applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2);
         void getValues(float val[]);

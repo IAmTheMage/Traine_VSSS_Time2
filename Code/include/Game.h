@@ -7,6 +7,7 @@
 #include "DataManager.hpp"
 #include "fstream"
 #include "Graphics.h"
+#include "StrategyPass.h"
 
 using json = nlohmann::json;
 

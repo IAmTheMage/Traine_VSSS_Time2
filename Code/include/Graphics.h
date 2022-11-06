@@ -20,7 +20,7 @@
 #define AREA_SIZE_H 70.0f
 #define AREA_SIZE_W 15.0f
 
-#define RENDER_COEFICIENT 8
+#define RENDER_COEFICIENT 6
 
 class Graphics {
     public:

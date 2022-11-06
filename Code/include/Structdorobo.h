@@ -31,13 +31,12 @@ struct RectCollider {
 struct Robot
 {
     Color color;
-    char function;
+    Vel speed;
 };
 
 template<typename T>
 struct Object {
-    Vel speed = {0, 0};
-    Point2f pos;
+    Point2f pos, vel;
     float mass, forward = 90;
     bool moving = true;
     T includedData;

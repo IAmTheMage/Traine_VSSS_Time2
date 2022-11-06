@@ -11,7 +11,7 @@
 #define KICK_COEFICIENT 10.f
 #define FRICTION_COEFICIENT 0.3f
 #define GRAVITY_COEFICIENT 978.f
-#define KP 1.3
+#define KP 0.1f
 
 class Movement {
     private:

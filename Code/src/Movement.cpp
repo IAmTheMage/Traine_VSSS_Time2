@@ -58,10 +58,11 @@ bool Movement::kick(Object<Robot> &obj, Object<void*> &ball, float force, float 
     if(force > 20.f) force = 20.f;
     if(angle > 35) angle = 35;
     if(angle < -35) angle = -35;
+    float real_angle = obj.forward + angle;
     if(distance < 0.5f) {
         ball.speed.dir += force;
         ball.speed.esq += force;
-        ball.forward = obj.forward + angle;
+        ball.forward = real_angle;
     }
 }
 
@@ -128,8 +129,16 @@ bool Movement::chase(Object<Robot> &obj, Point2f goal, float limit) {
 
 void Movement::chaseS(Object<Robot> &obj, Point2f goal, float limit, float diff) {
     float th = (Utils::getAngle(obj.pos, goal) - obj.forward);
-    obj.speed.esq = RUN_MOVEMENT - (th * KP);
-    obj.speed.dir = RUN_MOVEMENT + (th * KP);
+    if(diff < 0) {
+        obj.speed.esq = (RUN_MOVEMENT + (th * KP));
+        obj.speed.dir = (RUN_MOVEMENT - (th * KP));
+        obj.speed.esq *= -1;
+        obj.speed.dir *= -1;
+    }
+    else {
+        obj.speed.esq = (RUN_MOVEMENT - (th * KP));
+        obj.speed.dir = (RUN_MOVEMENT + (th * KP));
+    }
     std::cout << "OBJETO ESQ: " << obj.speed.esq << std::endl;
     std::cout << "OBJETO DIR: " << obj.speed.dir << std::endl;
 }

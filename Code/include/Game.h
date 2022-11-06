@@ -8,6 +8,7 @@
 #include "fstream"
 #include "Graphics.h"
 #include "StrategyPass.h"
+#include "Team2Strategy.h"
 
 using json = nlohmann::json;
 

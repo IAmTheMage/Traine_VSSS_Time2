@@ -17,7 +17,7 @@ Game::Game(int argc, char** argv) {
     this->strategy->setStrategy("Primeira estrategia"); */
 
     Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
-    Strategy* _pass2 = new Strategy(ball, team2Robots, team1Robots);
+    Team2Strategy* _pass2 = new Team2Strategy(ball, team2Robots, team1Robots);
     //StrategyPass* mimura = new StrategyPass(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
     this->strategy2 = new StrategyManager();
@@ -55,7 +55,8 @@ void Game::instance() {
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
         team2Robots[i].pos = {config["robotsPositions"]["team2"][i]["x"], config["robotsPositions"]["team2"][i]["y"]};
-        team2Robots[i].forward = -90;
+        team1Robots[i].forward = 0;
+        team2Robots[i].forward = 180;
     }
     #ifdef GRAPHICAL_USE
     for(int i = 0; i < 3; i++) {
@@ -76,7 +77,7 @@ void Game::run() {
         #endif
         //movement->collisionIndex = 0;
         this->strategy->deduce();
-        //this->strategy2->deduce();
+        this->strategy2->deduce();
         for (int i=0; i<6; i++) {
             if (i<3) {objs[i] = team1Robots[i];}
             else {objs[i] = team2Robots[i-3];}

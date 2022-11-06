@@ -6,6 +6,8 @@
     #define CONFIG_PATH "config.json"
 #endif
 
+using namespace std;
+
 Game::Game(int argc, char** argv) {
     if(argc > 1) {
         this->pauseCondition = atoi(argv[1]);
@@ -17,14 +19,9 @@ Game::Game(int argc, char** argv) {
     this->strategy->setStrategy("Primeira estrategia"); */
 
     Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
-    Team2Strategy* _pass2 = new Team2Strategy(ball, team2Robots, team1Robots);
-    //StrategyPass* mimura = new StrategyPass(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
-    this->strategy2 = new StrategyManager();
-    this->strategy->addStrategy("Passe",_pass);
+    this->strategy->addStrategy("Passe", _pass);
     this->strategy->setStrategy("Passe");
-    this->strategy2->addStrategy("Passe",_pass2);
-    this->strategy2->setStrategy("Passe");
 
     std::cout << "Size w: " << config["gameWidth"] << std::endl << std::endl << "Game height: " << config["gameHeight"] << std::endl << std::endl;
 }
@@ -40,6 +37,12 @@ void Game::instance() {
     std::ifstream ifs(CONFIG_PATH);
     config = json::parse(ifs);
     this->ball = std::make_shared<Object<void*>>();
+
+    ball->pos = {config["ball"]["x"], config["ball"]["y"]};
+    ball->vel = {0.0f, 0.0f};
+    ball->forward = config["ball"]["f"];
+    ball->mass = config["ball"]["m"];
+    ball->moving = false;
     
     #ifdef GRAPHICAL_USE
     Color team1Color = {config["colors"]["team1"]["r"], config["colors"]["team1"]["g"], config["colors"]["team1"]["b"]};
@@ -50,17 +53,18 @@ void Game::instance() {
     }
     graph = new Graphics(ball);
     #endif
-    reset();
-}
-
-void Game::reset() {
-    ball->pos = {config["ball"]["x"], config["ball"]["y"]};
-    ball->speed = {0.0f, 0.0f};
     for(int i = 0; i < 3; i++) {
         team1Robots[i].pos = {config["robotsPositions"]["team1"][i]["x"], config["robotsPositions"]["team1"][i]["y"]};
         team2Robots[i].pos = {config["robotsPositions"]["team2"][i]["x"], config["robotsPositions"]["team2"][i]["y"]};
-        team1Robots[i].forward = 0;
-        team2Robots[i].forward = 180;
+        
+        team1Robots[i].forward = config["robotsPositions"]["team1"][i]["f"];
+        team2Robots[i].forward = config["robotsPositions"]["team2"][i]["f"];
+
+        team1Robots[i].mass = config["robotsPositions"]["team1"][i]["m"];
+        team2Robots[i].mass = config["robotsPositions"]["team1"][i]["m"];
+    }
+    for (int i=0; i<6; i++) {
+        walls[i].pos = {config["walls"][i]["x"], config["walls"][i]["y"]};
     }
     #ifdef GRAPHICAL_USE
     for(int i = 0; i < 3; i++) {
@@ -75,60 +79,45 @@ void Game::run() {
     pauseCondition = config["pauseCondition"];
     std::cout << "Pause condition: " << pauseCondition << std::endl << std::endl;
     bool isRunning = score1 < pauseCondition && score2 < pauseCondition;
-    int ver_gol;
-    float virtual_timer = 0;
     while(isRunning) {
-        index++;
         #ifdef GRAPHICAL_USE
-        if(index % 60 == 0) 
-        graph->setTimer(1);
-        graph->setScores(score1, score2);
         graph->render();
         #endif
-        //movement->collisionIndex = 0;
+        // movement->collisionIndex = 0;
         this->strategy->deduce();
-        this->strategy2->deduce();
-        for (int i=0; i<6; i++) {
-            if (i<3) {objs[i] = team1Robots[i];}
-            else {objs[i] = team2Robots[i-3];}
+        // this->strategy2->deduce();
+
+        float sizes[2][2];
+        sizes[1][0] = 2.135; sizes[1][1] = 2.135;
+        movement->moveBall(*ball, 1/60.);
+
+        sizes[0][0] = 150; sizes[0][1] = 1;
+        Collision::reflection(walls[0], *ball, sizes, 'H');
+        Collision::reflection(walls[1], *ball, sizes, 'H');
+
+        sizes[0][0] = 1; sizes[0][1] = 25;
+        for (int i=2; i<6; i++) {
+            Collision::reflection(walls[i], *ball, sizes, 'V');
         }
 
-        for(int i = 0; i < 3; i++) {
-            movement->collision(team1Robots[i], *ball);
-            movement->collision(team2Robots[i], *ball);
+        sizes[0][0] = 4; sizes[0][1] = 4;
+        for (int j=0; j<3; j++) {
+            Collision::ballCollision(team1Robots[j], *ball, sizes);
+            Collision::ballCollision(team2Robots[j], *ball, sizes);
         }
-        if(ball->speed.dir != 0 || ball->speed.esq != 0) {
-            movement->moveBall(*ball, 1.f/60);
+
+        float limits[4] = {0, 150, 0, 130};
+        for (int k=0; k<3; k++) {
+            Collision::wallCollision(team1Robots[k], limits, 4);
+            Collision::wallCollision(team2Robots[k], limits, 4);
         }
+
         display();
-        ver_gol = Utils::getQuadrant(ball->pos);    // 0 - dentro do gol1, 10 - dentro do gol2
-        if(ver_gol == 0) {
-            score2++;
-            reset();
-        }
-        else if(ver_gol == 10) {
-            score1++;
-            reset();
-        }
-
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }
 
 void Game::display() {
-    std::cout << "Score: " << score1 << ":" << score2 << std::endl << std::endl;
-    std::cout << "Ball position is: { " << ball->pos.x << ',' << ball->pos.y << " }" << std::endl << std::endl; 
-
-    for (int i=0; i<n; i++) {
-        if (colliders[i][0] != 0) {
-            if (colliders[i][1] != 0) {
-                std::cout << "Collision between objects " << colliders[i][0];
-                std::cout << " and " << colliders[i][1] << std::endl;
-            }
-            else {
-                    std::cout << "Collision between object " << colliders[i][0];
-                std::cout << " and ball" << std::endl;
-            }
-        }
-    }
+    cout << "Score: " << score1 << " : " << score2 << endl;
+    cout << "Ball position: (" << ball->pos.x << ", " << ball->pos.y << ")" << "\n\n";
 }

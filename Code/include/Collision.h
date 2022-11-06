@@ -41,13 +41,15 @@ class Collision {
         }
 
         static void ballCollision(Object<Robot> obj, Object<void*> &ball, float sizes[2][2]) {
-            float M = obj.mass*obj.vel.x/5. + ball.mass*ball.vel.x;
+            float M = obj.mass*obj.vel.x/10. + ball.mass*ball.vel.x;
 
             RectCollider collider1 = {obj.pos.x, obj.pos.y, sizes[0][0], sizes[0][1]};
             RectCollider collider2 = {ball.pos.x, ball.pos.y, sizes[1][0], sizes[1][1]};
             if (checkCollision(collider1, collider2)) {
+                std::cout << "Ball collision" << std::endl << std::endl;
                 ball.vel.x = M/ball.mass;
                 ball.forward = Utils::getAngle(obj.pos, ball.pos);
+                std::cout << "Ball vel X: " << ball.vel.x << std::endl << std::endl;
             }
         }
 

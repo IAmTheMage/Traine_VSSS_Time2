@@ -44,6 +44,7 @@ class Game {
         StrategyManager* strategy;
         StrategyManager* strategy2;
         void instance();
+        Object<void*> walls[6];
 
         json config;
         #ifdef GRAPHICAL_USE

@@ -29,24 +29,30 @@ void Movement::setValues(float val[]) {
 }
 
 void Movement::moveRobot(Object<Robot> &obj, float dt) {
-    float Vl, Vr;
     Point2f dir;
     dir.x = cos(obj.forward * M_PI/180);
     dir.y = sin(obj.forward * M_PI/180);
+    int sgn1, sgn2;
 
-    if (obj.moving == false) {
-        if (obj.speed.dir > 0) {obj.speed.dir -= gravity*friction*dt;}
-        else {obj.speed.dir = 0;}
-        if (obj.speed.esq > 0) {obj.speed.esq -= gravity*friction*dt;}
-        else {obj.speed.esq = 0;}
+    if (obj.moving) {
+        obj.vel.x = obj.speed.dir + obj.speed.esq;
+        obj.vel.y = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
+    }
+    else {
+        sgn1 = abs(obj.vel.x) / obj.vel.x;
+        if (obj.vel.x > 0) {obj.vel.x -= friction*gravity*dt;}
+        if (obj.vel.x < 0) {obj.vel.x += friction*gravity*dt;}
+        if (abs(obj.vel.x) / obj.vel.x != sgn1) {obj.vel.x = 0;}
+
+        sgn2 = abs(obj.vel.y) / obj.vel.y;
+        if (obj.vel.y > 0) {obj.vel.y -= friction*gravity*dt;}
+        if (obj.vel.y < 0) {obj.vel.y += friction*gravity*dt;}
+        if (abs(obj.vel.y) / obj.vel.y != sgn1) {obj.vel.y = 0;}
     }
 
-    Vl = obj.speed.dir + obj.speed.esq;
-    Vr = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
-
-    obj.pos.x += dir.x * Vl*dt;
-    obj.pos.y += dir.y * Vl*dt;
-    obj.forward += Vr*dt;
+    obj.pos.x += dir.x * obj.vel.x*dt;
+    obj.pos.y += dir.y * obj.vel.x*dt;
+    obj.forward += obj.vel.y*dt;
 
     while (obj.forward > 180) {obj.forward -= 360;}
     while (obj.forward < -180) {obj.forward += 360;}
@@ -187,24 +193,12 @@ bool Movement::checkCollision(RectCollider rect1, RectCollider rect2) {
 }
 
 void Movement::moveBall(Object<void*> &obj, float dt) {
-    float Vl, Vr;
     Point2f dir;
     dir.x = cos(obj.forward * M_PI/180);
     dir.y = sin(obj.forward * M_PI/180);
 
-    if (obj.moving == false) {
-        if (obj.speed.dir > 0) {obj.speed.dir -= gravity*friction*dt;}
-        else {obj.speed.dir = 0;}
-        if (obj.speed.esq > 0) {obj.speed.esq -= gravity*friction*dt;}
-        else {obj.speed.esq = 0;}
-    }
-
-    Vl = obj.speed.dir + obj.speed.esq;
-    Vr = (obj.speed.dir - obj.speed.esq) * 0.45/M_PI;
-
-    obj.pos.x += dir.x * Vl*dt;
-    obj.pos.y += dir.y * Vl*dt;
-    obj.forward += Vr*dt;
+    obj.pos.x += dir.x * obj.vel.x*dt;
+    obj.pos.y += dir.y * obj.vel.x*dt;
 
     while (obj.forward > 180) {obj.forward -= 360;}
     while (obj.forward < -180) {obj.forward += 360;}

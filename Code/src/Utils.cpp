@@ -30,6 +30,14 @@ float Utils::getAngle(Point2f p1, Point2f p2) {
     return atan2(dir.y, dir.x) * 180 / M_PI;
 }
 
+float Utils::getRealAngle(Point2f p1, Point2f p2) {
+    Point2f dir;
+    dir.x = p2.x - p1.x;
+    dir.y = p1.y - p2.y;
+
+    return atan2(dir.y, dir.x) * 180 / M_PI;
+}
+
 int Utils::getQuadrant(Point2f p) {
     float x_axis = 150 / 3;     // tam de um quadrante
     float y_axis = 130 / 3;

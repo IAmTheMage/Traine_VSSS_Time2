@@ -32,6 +32,8 @@ public:
         myTeamRobots[BASE_GOOALKEPER_ROBOT].forward = -90.f;
         myTeamRobots[BASE_GOOALKEPER_ROBOT].pos.x = 9.f;
         myTeamRobots[BASE_GOOALKEPER_ROBOT].pos.y = 65.f;
+        strikerBot = new Object<Robot>;
+        strikerBot = &myTeamRobots[BASE_STRIKER_ROBOT];
     }
 
     void goalkeeper()
@@ -86,70 +88,116 @@ public:
     }
     void defender()
     {
-        std::cout << "Defender position: " << myTeamRobots[BASE_DEFENDER_ROBOT].pos.x << std::endl
-                  << std::endl;
-        if (myTeamRobots[BASE_DEFENDER_ROBOT].pos.x >= 146 || myTeamRobots[BASE_DEFENDER_ROBOT].pos.x <= 4)
-        {
-            is_defender_on_wall = true;
-        }
-        if(go_to_quadrant != -1) {
-            if(go_to_quadrant == 9) {
-
-            }
-        }
-        else if (!is_defender_on_wall)
-        {
-            if (ball->pos.x <= 75.f && Utils::getQuadrant(ball->pos) != -1)
-            {
-                if(ball->pos.x > myTeamRobots[BASE_DEFENDER_ROBOT].pos.x) {
-                    Point2f goal = {ball->pos.x - 10, ball->pos.y};
-                    movement->chaseS(myTeamRobots[BASE_DEFENDER_ROBOT], goal, 4.0f);
-                    movement->moveRobot(myTeamRobots[BASE_DEFENDER_ROBOT], (1.f / 60));
-                }
-                else if(ball->pos.x <= myTeamRobots[BASE_DEFENDER_ROBOT].pos.x && Utils::getAngle(ball->pos, myTeamRobots[BASE_DEFENDER_ROBOT].pos) - myTeamRobots[BASE_DEFENDER_ROBOT].forward > 20) {
-                    movement->spin(myTeamRobots[BASE_DEFENDER_ROBOT], 1);
-                    movement->moveRobot(myTeamRobots[BASE_DEFENDER_ROBOT], (1.f / 60));
-                }
-                else if(ball->pos.x <= myTeamRobots[BASE_DEFENDER_ROBOT].pos.x && Utils::getAngle(ball->pos, myTeamRobots[BASE_DEFENDER_ROBOT].pos) - myTeamRobots[BASE_DEFENDER_ROBOT].forward < -20) {
-                    movement->spin(myTeamRobots[BASE_DEFENDER_ROBOT], -1);
-                    movement->moveRobot(myTeamRobots[BASE_DEFENDER_ROBOT], (1.f / 60));
-                }
-                else if(abs(Utils::getAngle(ball->pos, myTeamRobots[BASE_DEFENDER_ROBOT].pos) - myTeamRobots[BASE_DEFENDER_ROBOT].forward < 20)) {
-                    movement->chaseS(myTeamRobots[BASE_DEFENDER_ROBOT], ball->pos, 1.f, 1.f);
-                    movement->moveRobot(myTeamRobots[BASE_DEFENDER_ROBOT], (1.f / 60));
-                    if(Utils::getDist(myTeamRobots[BASE_DEFENDER_ROBOT].pos, ball->pos) < 1.f) {
-                        movement->kick(myTeamRobots[BASE_DEFENDER_ROBOT], *ball, centroidAtk);
-                    }
-                }
-            }
-        }
-        else
-        {
-            myTeamRobots[BASE_DEFENDER_ROBOT].pos.x -= 0.1f;
-            if (myTeamRobots[BASE_DEFENDER_ROBOT].pos.x >= 8 && myTeamRobots[BASE_DEFENDER_ROBOT].pos.x <= 142)
-            {
-                is_defender_on_wall = false;
-            }
-        }
-        std::cout << "ABS VALUE: " << abs(Utils::getAngle(ball->pos, myTeamRobots[BASE_DEFENDER_ROBOT].pos) - myTeamRobots[BASE_DEFENDER_ROBOT].forward) << std::endl;
-    }
-    void striker()
-    {
         const int quadrant = Utils::getQuadrant(ball->pos);
-        std::cout << "Quadrant is: " << quadrant << " and time is: " << time << std::endl
-                  << std::endl;
-        if (quadrant == 3)
-        {
-            if (Utils::getDist(ball->pos, myTeamRobots[BASE_STRIKER_ROBOT].pos) > 0.5f)
-            {
-                movement->chaseS(myTeamRobots[BASE_STRIKER_ROBOT], ball->pos, 4.0f);
-                movement->moveRobot(myTeamRobots[BASE_STRIKER_ROBOT], (1.f / 60));
+        RectCollider col1 = {myTeamRobots[BASE_DEFENDER_ROBOT].pos.x, myTeamRobots[BASE_DEFENDER_ROBOT].pos.y, 4, 4};
+        RectCollider col2 = {ball->pos.x, ball->pos.y, 2.135, 2.135};
+        if(ball->pos.x < 75.f) {
+            float th = Utils::getAngle(myTeamRobots[BASE_DEFENDER_ROBOT].pos, ball->pos);
+            bool look_at = movement->lookAt(myTeamRobots[BASE_DEFENDER_ROBOT], th, 0.05);
+            if(look_at) {
+                movement->chaseS(myTeamRobots[BASE_DEFENDER_ROBOT], ball->pos, 1, 1);
+            }
+            movement->moveRobot(myTeamRobots[BASE_DEFENDER_ROBOT], 1/60.);
+
+            if(Collision::checkCollision(col1, col2)) {
+                movement->kick(myTeamRobots[BASE_DEFENDER_ROBOT], *ball, {myTeamRobots[BASE_STRIKER_ROBOT].pos.x + 20, myTeamRobots[BASE_STRIKER_ROBOT].pos.y + 10});
             }
         }
         else if(ball->pos.x > 75.f) {
-            movement->chaseS(myTeamRobots[BASE_STRIKER_ROBOT], ball->pos, 4.0f);
-            movement->moveRobot(myTeamRobots[BASE_STRIKER_ROBOT], (1.f / 60));
-            movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, centroidAtk);
+            if(!is_defender_allowed_to_attack) {
+                float th = Utils::getAngle(myTeamRobots[BASE_DEFENDER_ROBOT].pos, ball->pos);
+                bool look_at = movement->lookAt(myTeamRobots[BASE_DEFENDER_ROBOT], th, 0.05);
+                movement->moveRobot(myTeamRobots[BASE_DEFENDER_ROBOT], 1/60.);
+            }
+            else {
+                if(Collision::checkCollision(col1, col2)) {
+                    movement->kick(myTeamRobots[BASE_DEFENDER_ROBOT], *ball, centroidAtk);
+                }
+            }
+        }
+    }
+    void striker()
+    {
+        if(ball->pos.x >= 75.f) {
+            float th, d, x, y;
+            int places[3], i;
+
+            th = Utils::getAngle(strikerBot->pos, ball->pos);
+            d = Utils::getDist(strikerBot->pos, ball->pos);
+            y = 0;
+
+            RectCollider col1 = {strikerBot->pos.x, strikerBot->pos.y, 4, 4};
+            RectCollider col2 = {ball->pos.x, ball->pos.y, 2.135, 2.135};
+
+            
+            if (movement->lookAt(myTeamRobots[BASE_STRIKER_ROBOT], th, 0.05)) {
+                movement->chaseS(myTeamRobots[BASE_STRIKER_ROBOT], ball->pos, 1, 1);
+            }
+
+            places[0] = Utils::getQuadrant(ball->pos);
+            if (places[0] != 3 && places[0] != 9) {
+                for (int i=0; i<3; i++) {y += anotherTeamRobots[i].pos.y;}
+                y /= 3;
+
+                if (Collision::checkCollision(col1, col2)) {
+                    if (y > 65) {movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, {125, 22});}
+                    else {movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, {125, 108});}
+                }
+            }
+
+            else if (places[0] == 3) {
+                if (Collision::checkCollision(col1, col2)) {
+                    y = 0;
+                    for (i=0; i<3; i++) {
+                        if (Utils::getQuadrant(anotherTeamRobots[i].pos) == -2) {break;}
+                    }
+
+                    for (int j=0; j<3; j++) {
+                        if (j==i) {continue;}
+                        x += anotherTeamRobots[j].pos.y;
+                        y += anotherTeamRobots[j].pos.y;
+                    }
+                    x /= 2; y /= 2;
+
+                    places[1] = Utils::getQuadrant({x, y});
+                    if (places[1] != 6 && places[1] != 3) {
+                        x = anotherTeamRobots[i].pos.x + 15;
+                        if (anotherTeamRobots[i].pos.y > 65) {y = anotherTeamRobots[i].pos.y - 10;}
+                        else {y = anotherTeamRobots[i].pos.y + 10;}
+
+                        
+                        movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, {x, y});
+                    }
+                }
+            }
+
+            else if (places[0] == 9) {
+                if (Collision::checkCollision(col1, col2)) {
+                    y = 0;
+                    for (i=0; i<3; i++) {
+                        if (Utils::getQuadrant(anotherTeamRobots[i].pos) == -2) {break;}
+                    }
+
+                    for (int j=0; j<3; j++) {
+                        if (j==i) {continue;}
+                        x += anotherTeamRobots[j].pos.y;
+                        y += anotherTeamRobots[j].pos.y;
+                    }
+                    x /= 2; y /= 2;
+
+                    places[1] = Utils::getQuadrant({x, y});
+                    if (places[1] != 6 && places[1] != 9) {
+                        x = anotherTeamRobots[i].pos.x + 15;
+                        if (anotherTeamRobots[i].pos.y > 65) {y = anotherTeamRobots[i].pos.y - 10;}
+                        else {y = anotherTeamRobots[i].pos.y + 10;}
+
+                        
+                        movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, {x, y});
+                    }
+                }
+            }
+            
+            movement->moveRobot(myTeamRobots[BASE_STRIKER_ROBOT], 1/60.);
         }
     }
 
@@ -204,6 +252,8 @@ private:
     bool kicked = false;
     bool is_defender_on_wall = false;
     short go_to_quadrant = -1;
+    bool is_defender_allowed_to_attack = false;
+    Object<Robot> *strikerBot;
 };
 
 #endif

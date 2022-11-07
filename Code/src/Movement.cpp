@@ -144,6 +144,14 @@ void Movement::chaseS(Object<Robot> &obj, Point2f goal, float limit, float diff)
     std::cout << "OBJETO DIR: " << obj.speed.dir << std::endl;
 }
 
+void Movement::chaseS(Object<Robot> &obj, Point2f goal, float constant) {
+    float th = (Utils::getAngle(obj.pos, goal) - obj.forward);
+    obj.speed.esq = (RUN_MOVEMENT - (th * constant));
+    obj.speed.dir = (RUN_MOVEMENT + (th * constant));
+    std::cout << "OBJETO ESQ: " << obj.speed.esq << std::endl;
+    std::cout << "OBJETO DIR: " << obj.speed.dir << std::endl;
+}
+
 bool Movement::wallCollision(Object<Robot> obj, float limits[], float offset) {
     if (obj.pos.x < limits[0] + offset) {obj.moving = false; return true;}
     else if (obj.pos.x > limits[1] - offset) {obj.moving = false; return true;}
@@ -196,7 +204,11 @@ void Movement::moveBall(Object<void*> &obj, float dt) {
     Point2f dir;
     dir.x = cos(obj.forward * M_PI/180);
     dir.y = sin(obj.forward * M_PI/180);
-
+    if(obj.vel.x > 80.f) obj.vel.x = 80.f;
+    if(obj.vel.x != 0) {
+        if(obj.vel.x > 0) obj.vel.x -= FRICTION_COEFICIENT;
+        else obj.vel.x += FRICTION_COEFICIENT;
+    }
     obj.pos.x += dir.x * obj.vel.x*dt;
     obj.pos.y += dir.y * obj.vel.x*dt;
 
@@ -208,10 +220,10 @@ void Movement::spin(Object<Robot> &obj, float coeficient) {
     if(coeficient > 0) coeficient = 1.f;
     else if(coeficient < 0) coeficient = -1.f;
     if(obj.forward > 180) {
-        obj.forward = 0;
+        obj.forward = -180;
     }
     else if(obj.forward < -180) {
-        obj.forward = 0;
+        obj.forward = 180;
     }
     obj.forward += SPIN_COEFICIENT * coeficient;
 }

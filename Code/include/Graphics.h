@@ -34,10 +34,14 @@ class Graphics {
         };
         ~Graphics();
         void render() {
+            event_code = ' ';
             window->clear();
             sf::Event event;
             while(window->pollEvent(event)) {
                 if(event.type == sf::Event::Closed) window->close();
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+                event_code = 'R';
             }
             drawMap();
             RectCollider ballColider = {ball->pos.x, ball->pos.y};
@@ -137,6 +141,10 @@ class Graphics {
             time_flt_part = modf(temp_time, &time_intpart);
             time_flt_part *= 60;
         }
+
+        char getEventCode() {
+            return event_code;
+        }
     private:
         std::unique_ptr<sf::RenderWindow> window;
         std::vector<Object<Robot>*> robots;
@@ -147,6 +155,7 @@ class Graphics {
         double time = 300.f;
         double time_intpart = 0, time_flt_part = 0;
         int index = 0;
+        char event_code = ' ';
 };
 
 #endif

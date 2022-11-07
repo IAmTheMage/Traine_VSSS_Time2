@@ -33,6 +33,10 @@ class BaseStrategy {
             this->ball = _ball;
         }
 
+        virtual void reset() {
+            
+        }
+
     protected:
         std::shared_ptr<Object<void*>> ball;
         Object<Robot>* myTeamRobots;

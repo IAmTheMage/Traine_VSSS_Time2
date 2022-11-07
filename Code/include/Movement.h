@@ -7,12 +7,12 @@
 
 #define SPIN_COEFICIENT 2.5f
 
-#define RUN_MOVEMENT 20.f
+#define RUN_MOVEMENT 28.f
 #define SPIN_MOVEMENT 320.f
 #define KICK_COEFICIENT 10.f
 #define FRICTION_COEFICIENT 0.8f
 #define GRAVITY_COEFICIENT 978.f
-#define KP 0.1f
+#define KP 1.3f
 
 class Movement {
     private:
@@ -36,6 +36,7 @@ class Movement {
         bool fixAngle(Object<Robot> &obj, Point2f goal);
         bool chase(Object<Robot> &obj, Point2f goal, float limit);
         void chaseS(Object<Robot> &obj, Point2f goal, float limit, float diff);
+        void chaseS(Object<Robot> &obj, Point2f goal, float constant);
 
         bool wallCollision(Object<Robot> obj, float limits[], float offset);
         int objCollision(Object<Robot> objs[], Object<void*> &ball, int col[][2]);

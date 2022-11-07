@@ -10,6 +10,7 @@
 #include "chrono"
 #include "StrategyPass.h"
 #include "Team2Strategy.h"
+#include "FixedGooalkeperStrategy.h"
 
 using json = nlohmann::json;
 

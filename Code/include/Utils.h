@@ -21,6 +21,8 @@ class Utils
         static float getAngle(Point2f p1, Point2f p2);
 
         static int getQuadrant(Point2f p/*, short team = 1*/);
+        
+        static float getRealAngle(Point2f p1, Point2f p2);
 };
 
 #endif

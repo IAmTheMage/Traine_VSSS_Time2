@@ -41,6 +41,8 @@ class Collision {
         }
 
         static void ballCollision(Object<Robot> obj, Object<void*> &ball, float sizes[2][2]) {
+            float coeficient = 1;
+            if(obj.speed.dir < 0 && obj.speed.esq < 0) coeficient = -1;
             float M = obj.mass*obj.vel.x/10. + ball.mass*ball.vel.x;
 
             RectCollider collider1 = {obj.pos.x, obj.pos.y, sizes[0][0], sizes[0][1]};

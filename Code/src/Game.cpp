@@ -18,10 +18,15 @@ Game::Game(int argc, char** argv) {
     this->strategy->addStrategy("Primeira estrategia",_strategy);
     this->strategy->setStrategy("Primeira estrategia"); */
 
-    Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
+/*     Strategy* _pass = new Strategy(ball, team1Robots, team2Robots);
     this->strategy = new StrategyManager();
     this->strategy->addStrategy("Passe", _pass);
-    this->strategy->setStrategy("Passe");
+    this->strategy->setStrategy("Passe"); */
+
+    StrikerStrategy* _attack = new StrikerStrategy(ball, team1Robots, team2Robots);
+    this->strategy = new StrategyManager();
+    this->strategy->addStrategy("Ataque", _attack);
+    this->strategy->setStrategy("Ataque");
 
     std::cout << "Size w: " << config["gameWidth"] << std::endl << std::endl << "Game height: " << config["gameHeight"] << std::endl << std::endl;
 }
@@ -84,7 +89,6 @@ void Game::run() {
         graph->render();
         #endif
         // movement->collisionIndex = 0;
-        this->strategy->deduce();
         // this->strategy2->deduce();
 
         float sizes[2][2];
@@ -106,11 +110,13 @@ void Game::run() {
             Collision::ballCollision(team2Robots[j], *ball, sizes);
         }
 
-        float limits[4] = {0, 150, 0, 130};
+/*         float limits[4] = {0, 150, 0, 130};
         for (int k=0; k<3; k++) {
             Collision::wallCollision(team1Robots[k], limits, 4);
             Collision::wallCollision(team2Robots[k], limits, 4);
-        }
+        } */
+
+        this->strategy->deduce();
 
         display();
         isRunning = score1 < pauseCondition && score2 < pauseCondition;
@@ -118,6 +124,6 @@ void Game::run() {
 }
 
 void Game::display() {
-    cout << "Score: " << score1 << " : " << score2 << endl;
+    // cout << "Score: " << score1 << " : " << score2 << endl;
     cout << "Ball position: (" << ball->pos.x << ", " << ball->pos.y << ")" << "\n\n";
 }

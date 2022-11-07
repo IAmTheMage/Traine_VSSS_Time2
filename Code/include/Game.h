@@ -1,6 +1,5 @@
 #include "iostream"
 #include "Structdorobo.h"
-#include "StrategyManager.h"
 #include "Movement.h"
 #include "memory"
 #include "thread"
@@ -8,8 +7,11 @@
 #include "fstream"
 #include "Graphics.h"
 #include "chrono"
+
+#include "StrategyManager.h"
 #include "StrategyPass.h"
 #include "Team2Strategy.h"
+#include "StrikerStrategy.h"
 
 using json = nlohmann::json;
 

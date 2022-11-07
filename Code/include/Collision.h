@@ -12,11 +12,16 @@ class Collision {
                 return false;
         }
 
-        static void wallCollision(Object<Robot> &obj, float limits[4], float offset) {
+        static bool wallCollision(Object<Robot> &obj, float limits[4], float offset) {
             if (obj.pos.x < limits[0] + offset ||
                 obj.pos.x > limits[1] - offset ||
                 obj.pos.y < limits[2] + offset ||
-                obj.pos.y > limits[3] - offset) {obj.moving = false; obj.vel = {0, 0};}
+                obj.pos.y > limits[3] - offset) {
+                    obj.moving = false; 
+                    obj.vel = {0, 0};
+                    return true;
+            }
+            return false;
         }
 
         static void objCollision(Object<Robot> &obj1, Object<Robot> &obj2, float sizes[2][2]) {
@@ -41,15 +46,13 @@ class Collision {
         }
 
         static void ballCollision(Object<Robot> obj, Object<void*> &ball, float sizes[2][2]) {
-            float M = obj.mass*obj.vel.x/10. + ball.mass*ball.vel.x;
+            float M = obj.mass*obj.vel.x/5. + ball.mass*ball.vel.x;
 
             RectCollider collider1 = {obj.pos.x, obj.pos.y, sizes[0][0], sizes[0][1]};
             RectCollider collider2 = {ball.pos.x, ball.pos.y, sizes[1][0], sizes[1][1]};
             if (checkCollision(collider1, collider2)) {
-                std::cout << "Ball collision" << std::endl << std::endl;
                 ball.vel.x = M/ball.mass;
                 ball.forward = Utils::getAngle(obj.pos, ball.pos);
-                std::cout << "Ball vel X: " << ball.vel.x << std::endl << std::endl;
             }
         }
 

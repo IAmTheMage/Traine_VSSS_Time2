@@ -23,7 +23,7 @@
 #define AREA_SIZE_H 70.0f
 #define AREA_SIZE_W 15.0f
 
-#define RENDER_COEFICIENT 8
+#define RENDER_COEFICIENT 6
 
 class Graphics {
     public:
@@ -34,6 +34,9 @@ class Graphics {
         };
         ~Graphics();
         void render() {
+            Point2f dir, pos;
+            float th;
+
             window->clear();
             sf::Event event;
             while(window->pollEvent(event)) {
@@ -56,7 +59,18 @@ class Graphics {
                 _robot->includedData.color.b));
                 shape.setOrigin(sf::Vector2f(4.f * RENDER_COEFICIENT, 4.f * RENDER_COEFICIENT));
                 shape.setRotation(_robot->forward);
+
+                th = _robot->forward * M_PI/180;
+                dir.x = cos(th); dir.y = sin(th);
+                pos.x = (_robot->pos.x + 2*dir.x) * RENDER_COEFICIENT;
+                pos.y = (_robot->pos.y + 2*dir.y) * RENDER_COEFICIENT;
+
+                sf::CircleShape dot(1 * RENDER_COEFICIENT);
+                dot.setPosition(pos.x, pos.y);
+                dot.setFillColor(sf::Color::Blue);
+
                 window->draw(shape);
+                window->draw(dot);
             }
             window->draw(ballRepresentation);
             window->draw(ballColliderRepresentation);
@@ -94,7 +108,7 @@ class Graphics {
         }
 
         void drawScores() {
-            std::cout << "Draw text" << std::endl;
+            // std::cout << "Draw text" << std::endl;
             sf::Font font;
             if(!font.loadFromFile("./arial.ttf")) {
                 std::cout << "Erro em carregar a fonte" << std::endl;

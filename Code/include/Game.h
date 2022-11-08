@@ -1,6 +1,5 @@
 #include "iostream"
 #include "Structdorobo.h"
-#include "StrategyManager.h"
 #include "Movement.h"
 #include "memory"
 #include "thread"
@@ -8,6 +7,8 @@
 #include "fstream"
 #include "Graphics.h"
 #include "chrono"
+
+#include "StrategyManager.h"
 #include "StrategyPass.h"
 #include "Team2Strategy.h"
 #include "FixedGooalkeperStrategy.h"
@@ -29,8 +30,9 @@ class Game {
         void defenseFault();
     private:
         int score1 = 0, score2 = 0, pauseCondition;
-        int colliders[40][2];
-        int n;
+        bool tests[6][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+        int n[6] = {0, 0, 0, 0, 0, 0};
+        float th[6] = {0, 0, 0, 0, 0, 0};
 
         void reset();
 
@@ -46,7 +48,7 @@ class Game {
         StrategyManager* strategy2;
         void instance();
         Object<void*> walls[6];
-        bool is_paused = false;
+
         json config;
         #ifdef GRAPHICAL_USE
         Graphics* graph;

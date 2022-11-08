@@ -19,7 +19,7 @@ struct RobotsDists {
 
 class Strategy : public BaseStrategy {
     public:
-        Strategy(std::shared_ptr<Object<void*>> ball,Object<Robot>* myTeamRobots, 
+        /*Strategy(std::shared_ptr<Object<void*>> ball,Object<Robot>* myTeamRobots, 
         Object<Robot>* anotherTeamRobots) : BaseStrategy( ball, myTeamRobots, 
         anotherTeamRobots) {
             gooalkeperSelected = new Object<Robot>();
@@ -182,7 +182,7 @@ class Strategy : public BaseStrategy {
         bool spin_on_base = false;
         std::vector<RobotsDists> dists;
         bool kicked = false;
-        bool is_defender_on_wall = false;
+        bool is_defender_on_wall = false;*/
 };
 
 #endif

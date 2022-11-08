@@ -5,20 +5,15 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
-#define SPIN_COEFICIENT 2.5f
+#define SPIN_COEFFICIENT 10.f
 
-#define RUN_MOVEMENT 28.f
-#define SPIN_MOVEMENT 480.f
-#define KICK_COEFICIENT 10.f
-#define FRICTION_COEFICIENT 0.8f
+#define RUN_MOVEMENT 20.f
+#define SPIN_MOVEMENT 500.f
+#define FRICTION_COEFICIENT 0.3f
 #define GRAVITY_COEFICIENT 978.f
-#define KP 1.3f
+#define KP 0.1f
 
 class Movement {
-    private:
-        float speeds[3];
-        float friction, gravity;
-    
     public:
         Movement();
         ~Movement();
@@ -27,23 +22,12 @@ class Movement {
         void moveBall(Object<void*> &ball, float dt);
         void kick(Object<Robot> obj, Object<void*> &ball, Point2f goal);
         void applySpeed(Object<Robot> &obj, float coeficient);
-        void applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2);
-        void getValues(float val[]);
-        void setValues(float val[]);
 
         bool lookAt(Object<Robot> &obj, float angle, float limit);
         bool run(Object<Robot> &obj, Point2f goal, float offset);
-        bool fixAngle(Object<Robot> &obj, Point2f goal);
-        bool chase(Object<Robot> &obj, Point2f goal, float limit);
         void chaseS(Object<Robot> &obj, Point2f goal, float limit, float diff);
-        void chaseS(Object<Robot> &obj, Point2f goal, float constant);
-
-        bool wallCollision(Object<Robot> obj, float limits[], float offset);
-        int objCollision(Object<Robot> objs[], Object<void*> &ball, int col[][2]);
-        void momentum(Object<Robot> &obj, Object<void*> ball);
-        bool checkCollision(RectCollider collider1, RectCollider collider2);
-        void collision(Object<Robot> &obj, Object<void*> &ball);
-        void spin(Object<Robot> &obj, float coeficient);
+        void spin(Object<Robot> &obj, float coefficient);
+        void leaveWall(Object<Robot> &obj, Object<void*> walls[], bool tests[2], int &n, float &th);
 };
 
 #endif

@@ -30,8 +30,9 @@ class Game {
         void defenseFault();
     private:
         int score1 = 0, score2 = 0, pauseCondition;
-        int colliders[40][2];
-        int n;
+        bool tests[6][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+        int n[6] = {0, 0, 0, 0, 0, 0};
+        float th[6] = {0, 0, 0, 0, 0, 0};
 
         void reset();
 

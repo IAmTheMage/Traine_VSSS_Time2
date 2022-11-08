@@ -3,30 +3,8 @@
 #include <iostream>
 #include <cmath>
 
-Movement::Movement() {
-    speeds[0] = RUN_MOVEMENT;
-    speeds[1] = SPIN_MOVEMENT;
-    speeds[2] = KICK_COEFICIENT;
-    // friction = FRICTION_COEFICIENT;
-    // gravity = GRAVITY_COEFICIENT;
-}
+Movement::Movement() {}
 Movement::~Movement() {}
-
-void Movement::getValues(float val[]) {
-    val[0] = speeds[0];
-    val[1] = speeds[1];
-    val[2] = speeds[2];
-    val[3] = speeds[3];
-    val[4] = speeds[4];
-}
-
-void Movement::setValues(float val[]) {
-    speeds[0] = val[0];
-    speeds[1] = val[1];
-    speeds[2] = val[2];
-    friction = val[3];
-    gravity = val[4];
-}
 
 void Movement::moveRobot(Object<Robot> &obj, float dt) {
     Point2f dir;
@@ -96,10 +74,11 @@ void Movement::kick(Object<Robot> obj, Object<void*> &ball, Point2f goal) {
 bool Movement::lookAt(Object<Robot> &obj, float angle, float limit) {
     float th1 = abs(obj.forward), th2 = abs(angle);
     Point2f range = {th2*(1-limit), th2*(1+limit)};
+    float V = SPIN_MOVEMENT;
 
     if (th1 < range.x || th1 > range.y) {
-        if (th2-th1 > 0) {obj.speed = {-speeds[1], speeds[1]};}
-        else {obj.speed = {speeds[1], -speeds[1]};}
+        if (th2-th1 > 0) {obj.speed = {-V, V};}
+        else {obj.speed = {V, -V};}
 
         return false;
     }
@@ -107,51 +86,21 @@ bool Movement::lookAt(Object<Robot> &obj, float angle, float limit) {
 }
 
 bool Movement::run(Object<Robot> &obj, Point2f goal, float offset) {
-    float d = Utils::getDist(obj.pos, goal);
-    float limit = 2 * pow(speeds[0], 2) / (gravity * friction);
+    float u, g, V;
+    u = FRICTION_COEFICIENT;
+    g = GRAVITY_COEFICIENT;
+    V = RUN_MOVEMENT;
 
-    if (d > limit + offset) {obj.speed = {speeds[0], speeds[0]}; return false;}
+    float d = Utils::getDist(obj.pos, goal);
+    float limit = 2 * pow(V, 2) / (u*g);
+
+    if (d > limit + offset) {obj.speed = {V, V}; return false;}
     else {obj.speed = {0, 0}; return true;}
 }
 
-void Movement::applySpeed(Object<Robot> &obj, float coeficient) {
-    obj.speed.dir = speeds[0] * coeficient;
-    obj.speed.esq = speeds[0] * coeficient;
-}
-
-void Movement::applySpeed(Object<Robot> &obj, float coeficient1, float coeficient2) {
-    obj.speed.dir = speeds[0] * coeficient1;
-    obj.speed.esq = speeds[0] * coeficient2;
-}
-
-bool Movement::fixAngle(Object<Robot> &obj, Point2f goal) {
-    float th = Utils::getAngle(obj.pos, goal) * M_PI / 180;
-    bool test = true;
-
-    if (th > M_PI * 2/3.) {test = lookAt(obj, 180, 0.01);}
-    if (th > M_PI/3) {test = lookAt(obj, 90, 0.01);}
-    if (th < -M_PI * 2/3.) {test = lookAt(obj, -180, 0.01);}
-    if (th < -M_PI/3) {test = lookAt(obj, -90, 0.01);}
-
-    return test;
-}
-
-bool Movement::chase(Object<Robot> &obj, Point2f goal, float limit) {
-    float d = Utils::getDist(obj.pos, goal);
-    float th = (Utils::getAngle(obj.pos, goal) - obj.forward) * M_PI/180;
-    float S = 2 / (1 + exp(-abs(th))) - 1;
-    float V = speeds[0] / (1 + exp(-d));
-
-    float Vd, Ve;
-    if (th >= 0) {Vd = V; Ve = V * (1 - 10*S);}
-    if (th >= M_PI/2) {Vd = -V; Ve = -V * (1 - 10*S);}
-    if (th < 0) {Ve = V; Vd = V * (1 - 10*S);}
-    if (th <= -M_PI/2) {Ve = -V; Vd = -V * (1 - 10*S);}
-
-    if (d > limit) {obj.speed = {Ve, Vd}; return false;}
-    else {obj.speed = {0, 0}; return true;}
-
-    return false;
+void Movement::applySpeed(Object<Robot> &obj, float coefficient) {
+    obj.speed.dir = RUN_MOVEMENT * coefficient;
+    obj.speed.esq = RUN_MOVEMENT * coefficient;
 }
 
 void Movement::chaseS(Object<Robot> &obj, Point2f goal, float limit, float diff) {
@@ -179,6 +128,44 @@ void Movement::spin(Object<Robot> &obj, float coefficient) {
         obj.forward += 360;
     } */
 
-    if (coefficient > 0) {obj.speed = {-speeds[1], speeds[1]};}
-    else {obj.speed = {speeds[1], -speeds[1]};}
+    float V = SPIN_MOVEMENT;
+
+    if (coefficient > 0) {obj.speed = {-V, V};}
+    else {obj.speed = {V, -V};}
+}
+
+void Movement::leaveWall(Object<Robot> &obj, Object<void*> walls[], bool tests[2], int &n, float &th) {
+    float limits[4] = {0, 150, 0, 130};
+    float sizes[7][2] = {{4, 4}, {150, 1}, {150, 1}, {1, 25}, {1, 25}, {1, 25}, {1, 25}};
+    float angle;
+
+    RectCollider col1;
+    RectCollider col2;
+
+    if (tests[0] == false) {
+        for (int i=0; i<6; i++) {
+            col1 = {obj.pos.x, obj.pos.y, sizes[0][0], sizes[0][1]};
+            col2 = {walls[i].pos.x, walls[i].pos.y, sizes[i+1][0], sizes[i+1][1]};
+            tests[0] = Collision::checkCollision(col1, col2);
+            if (tests[0] == true) {break;}
+        }
+    }
+
+    else if (tests[0] == true && tests[1] == false) {
+        n = 60;
+        tests[1] = true;
+        th = obj.forward + 90;
+    }
+
+    else {
+        if (n > 30) {applySpeed(obj, -2); n--;}
+        else if (n > 0) {spin(obj, 1); n--;}
+        else {
+            obj.speed = {0, 0};
+            tests[0] = 0;
+            tests[1] = 0;
+        }
+
+        moveRobot(obj, 1/60.);
+    }
 }

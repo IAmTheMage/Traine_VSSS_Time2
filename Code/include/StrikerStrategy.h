@@ -107,6 +107,11 @@ class StrikerStrategy : public BaseStrategy {
             movement->moveRobot(myTeamRobots[BOT], 1/60.);
         }
 
+        void defender() {
+            movement->applySpeed(myTeamRobots[BOT], 1);
+            movement->moveRobot(myTeamRobots[BOT], 1/60.);
+        }
+
         void decisions() {
             if(index == 0) start_time = std::chrono::system_clock::now();
             index++;
@@ -114,7 +119,7 @@ class StrikerStrategy : public BaseStrategy {
             std::chrono::duration<double> _time = current_time - start_time;
             time = _time.count();
 
-            striker();
+            defender();
         }
 };
 

@@ -12,17 +12,16 @@ class Collision {
                 return false;
         }
 
-        static bool wallCollision(Object<Robot> &obj, float limits[4], float offset) {
+/*         static bool wallCollision(Object<Robot> &obj, float limits[4], float offset) {
             if (obj.pos.x < limits[0] + offset ||
                 obj.pos.x > limits[1] - offset ||
                 obj.pos.y < limits[2] + offset ||
                 obj.pos.y > limits[3] - offset) {
-                    obj.moving = false; 
                     obj.vel = {0, 0};
-                    return true;
+                    return false;
             }
-            return false;
-        }
+            return true;
+        } */
 
         static void objCollision(Object<Robot> &obj1, Object<Robot> &obj2, float sizes[2][2]) {
             float offX, offY;

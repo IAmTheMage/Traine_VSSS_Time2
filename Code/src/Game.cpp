@@ -110,13 +110,13 @@ void Game::run() {
             Collision::ballCollision(team2Robots[j], *ball, sizes);
         }
 
-/*         float limits[4] = {0, 150, 0, 130};
-        for (int k=0; k<3; k++) {
-            Collision::wallCollision(team1Robots[k], limits, 4);
-            Collision::wallCollision(team2Robots[k], limits, 4);
-        } */
-
         this->strategy->deduce();
+
+        for (int k=0; k<3; k++) {
+            movement->leaveWall(team1Robots[k], walls, tests[k], n[k], th[k]);
+            movement->leaveWall(team2Robots[k], walls, tests[k+3], n[k+3], th[k+3]);
+        }
+
 
         display();
         isRunning = score1 < pauseCondition && score2 < pauseCondition;

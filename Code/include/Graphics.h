@@ -43,6 +43,9 @@ class Graphics {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
                 event_code = 'R';
             }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+                event_code = 'P';
+            }
             drawMap();
             RectCollider ballColider = {ball->pos.x, ball->pos.y};
             sf::RectangleShape ballColliderRepresentation(sf::Vector2f(RENDER_COEFICIENT * ballColider.width, RENDER_COEFICIENT * ballColider.height));

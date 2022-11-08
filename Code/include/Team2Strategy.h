@@ -119,6 +119,7 @@ public:
     void striker()
     {
         if(ball->pos.x <= 75.f) {
+            std::cout << "STRIKER IS ON ATACK" << std::endl;
             float th, d, x, y;
             int places[3], i;
 
@@ -140,10 +141,6 @@ public:
                 y /= 3;
 
                 if (Collision::checkCollision(col1, col2)) {
-                    if(x > 100) {
-                        movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, myTeamRobots[BASE_DEFENDER_ROBOT].pos);
-                        is_defender_allowed_to_attack = true;
-                    }
                     if (y > 65) {movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, {125, 22});}
                     else {movement->kick(myTeamRobots[BASE_STRIKER_ROBOT], *ball, {125, 108});}
                 }
@@ -153,7 +150,7 @@ public:
                 if (Collision::checkCollision(col1, col2)) {
                     y = 0;
                     for (i=0; i<3; i++) {
-                        if (Utils::getQuadrant(anotherTeamRobots[i].pos) == -2) {break;}
+                        if (Utils::getQuadrant(anotherTeamRobots[i].pos) == -1) {break;}
                     }
 
                     for (int j=0; j<3; j++) {
@@ -164,7 +161,7 @@ public:
                     x /= 2; y /= 2;
 
                     places[1] = Utils::getQuadrant({x, y});
-                    if (places[1] != 6 && places[1] != 3) {
+                    if (places[1] != 4 && places[1] != 7) {
                         x = anotherTeamRobots[i].pos.x + 15;
                         if (anotherTeamRobots[i].pos.y > 65) {y = anotherTeamRobots[i].pos.y - 10;}
                         else {y = anotherTeamRobots[i].pos.y + 10;}
@@ -225,7 +222,7 @@ public:
                   { return dists1.dist < dists2.dist; });
         goalkeeper();
         defender();
-        //striker();
+        striker();
     }
 
     bool ballIsOnDefense()

@@ -104,47 +104,52 @@ void Game::run() {
             reset();
             continue;
         }
+        else if(graph->getEventCode() == 'P') {
+            is_paused = !is_paused;
+        }
         #endif
-        // movement->collisionIndex = 0;
-        this->strategy->deduce();
-        this->strategy2->deduce();
+        if(is_paused == false) {
+            // movement->collisionIndex = 0;
+            this->strategy->deduce();
+            this->strategy2->deduce();
 
-        float sizes[2][2];
-        sizes[1][0] = 2.135; sizes[1][1] = 2.135;
-        movement->moveBall(*ball, 1/60.);
-        int ver_gol = 0;
-        sizes[0][0] = 150; sizes[0][1] = 1;
-        Collision::reflection(walls[0], *ball, sizes, 'H');
-        Collision::reflection(walls[1], *ball, sizes, 'H');
+            float sizes[2][2];
+            sizes[1][0] = 2.135; sizes[1][1] = 2.135;
+            movement->moveBall(*ball, 1/60.);
+            int ver_gol = 0;
+            sizes[0][0] = 150; sizes[0][1] = 1;
+            Collision::reflection(walls[0], *ball, sizes, 'H');
+            Collision::reflection(walls[1], *ball, sizes, 'H');
 
-        sizes[0][0] = 1; sizes[0][1] = 25;
-        for (int i=2; i<6; i++) {
-            Collision::reflection(walls[i], *ball, sizes, 'V');
-        }
+            sizes[0][0] = 1; sizes[0][1] = 25;
+            for (int i=2; i<6; i++) {
+                Collision::reflection(walls[i], *ball, sizes, 'V');
+            }
 
-        sizes[0][0] = 4; sizes[0][1] = 4;
-        for (int j=0; j<3; j++) {
-            Collision::ballCollision(team1Robots[j], *ball, sizes);
-            Collision::ballCollision(team2Robots[j], *ball, sizes);
-        }
+            sizes[0][0] = 4; sizes[0][1] = 4;
+            for (int j=0; j<3; j++) {
+                Collision::ballCollision(team1Robots[j], *ball, sizes);
+                Collision::ballCollision(team2Robots[j], *ball, sizes);
+            }
 
-        float limits[4] = {0, 150, 0, 130};
-        for (int k=0; k<3; k++) {
-            Collision::wallCollision(team1Robots[k], limits, 4);
-            Collision::wallCollision(team2Robots[k], limits, 4);
+            float limits[4] = {0, 150, 0, 130};
+            for (int k=0; k<3; k++) {
+                Collision::wallCollision(team1Robots[k], limits, 4);
+                Collision::wallCollision(team2Robots[k], limits, 4);
+            }
+            ver_gol = Utils::getQuadrant(ball->pos);    // 0 - dentro do gol1, 10 - dentro do gol2
+            if(ver_gol == 0) {
+                score2++;
+                reset();
+            }
+            else if(ver_gol == 10) {
+                score1++;
+                reset();
+            }
+            graph->setScores(score1, score2);
+            display();
+            isRunning = score1 < pauseCondition && score2 < pauseCondition;
         }
-        ver_gol = Utils::getQuadrant(ball->pos);    // 0 - dentro do gol1, 10 - dentro do gol2
-        if(ver_gol == 0) {
-            score2++;
-            reset();
-        }
-        else if(ver_gol == 10) {
-            score1++;
-            reset();
-        }
-        graph->setScores(score1, score2);
-        display();
-        isRunning = score1 < pauseCondition && score2 < pauseCondition;
     }
 }
 

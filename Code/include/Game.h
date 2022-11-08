@@ -46,7 +46,7 @@ class Game {
         StrategyManager* strategy2;
         void instance();
         Object<void*> walls[6];
-
+        bool is_paused = false;
         json config;
         #ifdef GRAPHICAL_USE
         Graphics* graph;
